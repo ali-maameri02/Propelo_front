@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* :root {
+  --default-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Ubuntu, "Helvetica Neue", Helvetica, Arial, "PingFang SC",
+    "Hiragino Sans GB", "Microsoft Yahei UI", "Microsoft Yahei",
+    "Source Han Sans CN", sans-serif; */
+
+
+.main-container {
+  overflow: hidden;
+}
+
+.main-container,
+.main-container * {
+  box-sizing: border-box;
+}
+/* style.css */
+.sidebar-item {
+  transition: background-color 0.3s;
+}
+
+.sidebar-item:hover,
+.sidebar-item.active {
+  background-color: #DBEAFE; /* Replace with your color code */
+}
+
+.sidebar-item .MuiListItemIcon-root {
+  transition: color 0.3s;
+}
+
+.sidebar-item:hover .MuiListItemIcon-root,
+.sidebar-item.active .MuiListItemIcon-root {
+  color: #2563EB; /* Replace with your hover color */
+}
+
+select,
+textarea,
+button {
+  outline: 0;
+}
+
+
+.avatar{
+  width:24px;
+  height:24px;
+}
+aside{
+  height: 100vh;
+  width:15vw ;
+}
+aside li a {
+  border-radius: 2px;
+}
+aside a:hover{
+transition: ease-in-out all 200ms;
+
+}
+
