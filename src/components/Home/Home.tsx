@@ -3,7 +3,7 @@ import { Button } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
-import PropertyMap from "../Dashboard-pages/Properities/PropertyMap";
+import PropertiesMarkerMap from "./PropertiesMarkerMap";
 import Footer from "./Footer";
 import { Slide } from "react-awesome-reveal";
 
@@ -45,8 +45,8 @@ export const Home: React.FC = () => {
     fetchApartments();
   }, []);
 
-  const handleCardClick = (apartmentId: number) => {
-    navigate(`/Apprtementdetail/${apartmentId}`);
+  const handleCardClick = (apartmentId: number, propertyId: number) => {
+    navigate(`/Apprtementdetail/${apartmentId}?propertyId=${propertyId}`);
   };
 
   return (
@@ -87,8 +87,7 @@ export const Home: React.FC = () => {
             <div
               key={apartment.id}  // Use the unique apartment ID for the key
               className=""
-              onClick={() => handleCardClick(apartment.id)}  // Pass the apartment ID to the click handler
-            >
+              onClick={() => handleCardClick(apartment.id, apartment.propertyId)}             >
               <div className="flex flex-row items-center justify-around w-100">
                 {/* Display first picture if available */}
                 {pictures[apartment.id]?.length > 0 ? (
@@ -125,12 +124,8 @@ export const Home: React.FC = () => {
         </div>
         {/* Map Container */}
         <Slide direction="right" className="flex-1 p-4">
-          <PropertyMap 
-            locationData={locationData} 
-            disableSearch={true} 
-            // disableLayerControl={true} 
-            // hideLayerControl={false} 
-          />
+        <PropertiesMarkerMap />
+
         </Slide>
       </div>
 

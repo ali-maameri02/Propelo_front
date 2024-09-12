@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useNavigate } from 'react-router-dom';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import CallIcon from '@mui/icons-material/Call';
+import axios from 'axios';
 
 const columns = (handleOpen: (rowData: any) => void, navigate: any): GridColDef[] => [
   { field: 'name', headerName: 'Nom', width: 150 },
   { field: 'email', headerName: 'Email', width: 200 },
-  { field: 'phoneNumber', headerName: 'Numéro de téléphone', width: 180 },
+  { field: 'phone', headerName: 'Numéro de téléphone', width: 180 },
   {
     field: 'apartmentId',
     headerName: 'ID Appartement',
@@ -37,17 +38,25 @@ const columns = (handleOpen: (rowData: any) => void, navigate: any): GridColDef[
   },
 ];
 
-const rows = [
-  { id: 1, name: 'Commande1', email: 'email1@example.com', phoneNumber: '0123456789', apartmentId: 'A001' },
-  { id: 2, name: 'Commande2', email: 'email2@example.com', phoneNumber: '0987654321', apartmentId: 'A002' },
-  { id: 3, name: 'Commande3', email: 'email3@example.com', phoneNumber: '1112233445', apartmentId: 'A003' },
-  { id: 4, name: 'Commande4', email: 'email4@example.com', phoneNumber: '2223344556', apartmentId: 'A004' },
-];
-
 const Commandes: React.FC = () => {
+  const [orders, setOrders] = useState<any[]>([]);
   const [open, setOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState<any>(null);
   const navigate = useNavigate();
+
+  // Fetch orders from API
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await axios.get('http://propelo.runasp.net/api/Order');
+        setOrders(response.data);
+      } catch (error) {
+        console.error('Error fetching orders:', error);
+      }
+    };
+
+    fetchOrders();
+  }, []);
 
   const handleOpen = (rowData: any) => {
     setSelectedRow(rowData);
@@ -65,8 +74,9 @@ const Commandes: React.FC = () => {
       </div>
       <div className="ml-24" style={{ height: 400, width: '70vw' }}>
         <DataGrid
-          rows={rows}
+          rows={orders}
           columns={columns(handleOpen, navigate)}
+          getRowId={(row) => row.id} // Ensure each row has a unique 'id' field
           initialState={{
             pagination: {
               paginationModel: { page: 0, pageSize: 5 },
@@ -83,12 +93,14 @@ const Commandes: React.FC = () => {
           <DialogContentText>
             <strong>Nom:</strong> {selectedRow?.name} <br />
             <strong>Email:</strong> {selectedRow?.email} <br />
-            <strong>Numéro de téléphone:</strong> {selectedRow?.phoneNumber}
+            <strong>Numéro de téléphone:</strong> {selectedRow?.phone}
+            <br/>
+            <strong>Message:</strong> {selectedRow?.message}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button
-            onClick={() => window.location.href = `tel:${selectedRow?.phoneNumber}`}
+            onClick={() => window.location.href = `tel:${selectedRow?.phone}`}
             color="primary"
             startIcon={<CallIcon />}
           >

@@ -8,6 +8,7 @@ import SalesChart from "./Dashboard-components/SalesChart";
 import Statisics from "./Dashboard-components/Statistics-cards";
 import { Slide } from "react-awesome-reveal";
 import Alert from '@mui/material/Alert';
+import { fetchApartments , fetchOrders } from "./Dashboard-pages/utils/apiUtils";
 
 interface DashboardProps {
   id: number; // Assuming id is passed as a prop

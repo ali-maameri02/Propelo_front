@@ -61,8 +61,11 @@ const Getpictures: React.FC<{ images: { url: string }[] }> = ({ images }) => {
             boxShadow: 24,
             p: 1,
             outline: 'none',
-            
-            maxHeight: '80vh',
+            height:'80vh',
+            display:'flex',
+            justifyContent:'center',
+            alignItems:'center',
+            maxHeight: '90vh',
             width: '90vw',
           }}
         >

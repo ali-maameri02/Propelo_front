@@ -34,6 +34,7 @@ export const fetchProperties = async () => {
     try {
       const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/Property`);
       if (response.status === 200) {
+        console.log()
         return response.data; // Assuming the data is an array of properties
       } else {
         throw new Error(`Unexpected response status: ${response.status}`);
@@ -43,4 +44,28 @@ export const fetchProperties = async () => {
       return [];
     }
   };
+  export const fetchApartments = async (): Promise<number> => {
+    try {
+      const response = await axios.get('http://propelo.runasp.net/api/Apartment');
+      const data = response.data;
+      const apartmentIds = data.map((apartment: any) => apartment.id);
+      const uniqueApartmentIds = new Set(apartmentIds);
+      return uniqueApartmentIds.size;
+    } catch (error) {
+      console.error("Error fetching apartments", error);
+      return 0; // Return 0 or handle the error as needed
+    }
+  };
   
+  export const fetchOrders = async (): Promise<number> => {
+    try {
+      const response = await axios.get('http://propelo.runasp.net/api/Order');
+      const data = response.data;
+      const orderIds = data.map((order: any) => order.id);
+      const uniqueOrderIds = new Set(orderIds);
+      return uniqueOrderIds.size;
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+      return 0; // Return 0 or handle the error as needed
+    }
+  };
