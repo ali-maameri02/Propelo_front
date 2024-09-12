@@ -74,7 +74,7 @@ const Appartement: React.FC = () => {
                         <h1 className="font-almarai font-bold text-textcolor">Appartements</h1>
                         <Button variant="contained" onClick={handleAddPropertyClick}>Ajouter</Button>
                     </div>
-                    <div style={{ height: 400, width: '66vw', display: "flex", justifyContent: "center" }}>
+                    <div style={{ height: 400, width: '80vw', display: "flex", justifyContent: "center" }}>
                         <DataGrid
                             rows={rows}
                             columns={columns}
@@ -85,7 +85,7 @@ const Appartement: React.FC = () => {
                             }}
                             pageSizeOptions={[5, 10]}
                             checkboxSelection
-                            style={{ marginLeft: "15rem" }}
+                            style={{ marginLeft: "" }}
                         />
                     </div>
                 </>

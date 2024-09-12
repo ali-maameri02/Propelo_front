@@ -1,19 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import axios, { AxiosError } from "axios";
-import Stepper from "@mui/material/Stepper";
-import Step from "@mui/material/Step";
-import StepLabel from "@mui/material/StepLabel";
-import Typography from "@mui/material/Typography";
-import Setpictures, { ImageType } from "./Setpictures";
-import PropertyMap from "./PropertyMap";
-import Breadcrumbs from "../Breadcrumbs";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import Typography from '@mui/material/Typography';
+import { useParams } from 'react-router-dom';
+import { Stepper, Step, StepLabel, Button, Breadcrumbs } from '@mui/material';
+import Setpictures from './Setpictures';
+import PropertyMap from './PropertyMap';
 
 const steps = [
-  "Saisir les détails de la propriété",
-  "Ajouter les photos",
-  "Ajouter Location dans Map",
-  "Confirmer la Location",
+  'Saisir les détails de la propriété',
+  'Ajouter les photos',
+  'Ajouter Location dans Map',
+  'Confirmer la Location',
 ];
 
 const UpdateProperties: React.FC = () => {
@@ -21,38 +18,54 @@ const UpdateProperties: React.FC = () => {
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const [activeStep, setActiveStep] = useState(0);
-  const [skipped, setSkipped] = useState(new Set<number>());
   const [formData, setFormData] = useState<any>(null);
-  const [images, setImages] = useState<ImageType[]>([]);
+  const [currentPictures, setCurrentPictures] = useState<any[]>([]);
+  const [selectedPictureId, setSelectedPictureId] = useState<number | null>(null);
   const [locationData, setLocationData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-
+  const [skipped, setSkipped] = useState(new Set<number>());
   const isStepSkipped = (step: number) => skipped.has(step);
-
   useEffect(() => {
-    const fetchProperty = async () => {
-      try {
-        const response = await axios.get(`${API_BASE_URL}/Property/${id}`);
-        setFormData(response.data);
-      } catch (error) {
-        console.error("Error fetching property data:", error);
-      }
-    };
-    fetchProperty();
+    if (id) {
+      const fetchData = async () => {
+        try {
+          const propertyResponse = await axios.get(`${API_BASE_URL}/Property/${id}`);
+          setFormData(propertyResponse.data);
+  
+          const imagesResponse = await axios.get(`${API_BASE_URL}/PropertyPicture/property/${id}`);
+          console.log('Fetched Pictures:', imagesResponse.data); // Debugging line
+          setCurrentPictures(imagesResponse.data);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+          setError('Erreur lors du chargement des données.');
+        }
+      };
+  
+      fetchData();
+    } else {
+      setError('ID de propriété manquant.');
+    }
   }, [id, API_BASE_URL]);
-
+  
+  
   const handleNext = async () => {
+    if (!id) return; // Ensure id is defined
+    
     if (activeStep === 0) {
-      handleUpdatePropertyData();
-    } else if (activeStep === 1) {
-      handleSubmitImages();
+      await handleUpdatePropertyData();
+    } 
+    if (activeStep === 1) {
+      // if (selectedPictureId) {
+      //   await handleEditPicture(selectedPictureId);
+      // } else {
+      //   console.warn("No picture selected for editing.");
+      // }
       setActiveStep((prev) => prev + 1);
-
     } else if (activeStep === 2) {
       setActiveStep((prev) => prev + 1);
     } else if (activeStep === 3) {
-      updatePropertyLocation();
+      await updatePropertyLocation();
     }
   };
 
@@ -60,17 +73,64 @@ const UpdateProperties: React.FC = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const saveLocationData = (data: any) => {
-    setLocationData(data);
-    localStorage.setItem("propertyLocation", JSON.stringify(data));
-  };
+  const handleEditPicture = async (pictureId: number) => {
+    if (!id) {
+      console.error('Property ID is undefined.');
 
-  const loadLocationData = () => {
-    const storedData = localStorage.getItem("propertyLocation");
-    return storedData ? JSON.parse(storedData) : null;
+      return;
+    }
+    if (pictureId === undefined) {
+      console.log('ana howa',pictureId)
+      console.error('pictureId is undefined.');
+      return;
+    }
+  console.log('deuxieme fois ya zbi',pictureId)
+    // Create file input dialog and handle file selection
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = async (event: Event) => {
+      const target = event.target as HTMLInputElement;
+      const files = target.files;
+      if (files && files.length > 0) {
+        const file = files[0];
+        const formData = new FormData();
+        formData.append('id', pictureId.toString());
+        console.log(pictureId)
+        formData.append('propertyId', id);
+        formData.append('Pictures', file);
+        console.log('tswurti',file)
+  
+        try {
+          console.log('dkhlttttttt')
+          const response = await axios.put(`${API_BASE_URL}/PropertyPicture/${pictureId}`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+  console.log('khrjt b charaf')
+          if (response.status === 200) {
+            const updatedPicture = { ...currentPictures.find(p => p.Id === pictureId), picturePath: URL.createObjectURL(file) };
+            setCurrentPictures(prev => prev.map(p => (p.Id === pictureId ? updatedPicture : p)));
+            setSuccess('L\'image a été mise à jour avec succès.');
+          } else {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+        } catch (err) {
+          if (err instanceof Error) {
+            setError(`Erreur lors de la mise à jour de l'image: ${err.message}`);
+          }
+        }
+      }
+    };
+  
+    input.click();
   };
-
+  
+  
   const handleUpdatePropertyData = async () => {
+    if (!id) return; // Ensure id is defined
+    
     const payload = {
       ...formData,
       latitude: locationData?.latitude || formData.latitude,
@@ -80,12 +140,14 @@ const UpdateProperties: React.FC = () => {
     try {
       const response = await axios.put(`${API_BASE_URL}/Property/${id}`, payload, {
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
         },
       });
+
       if (response.status === 200) {
         setActiveStep((prev) => prev + 1);
+        setSuccess('Les détails de la propriété ont été mis à jour avec succès.');
       } else {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -96,62 +158,37 @@ const UpdateProperties: React.FC = () => {
     }
   };
 
-  const handleSubmitImages = async () => {
-    const formData = new FormData();
-  
-    // Add property picture Id to form data
-    formData.append("Id", id!);  // Ensure 'id' is defined
-  
-    // Add images to form data
-    images.forEach((image) => {
-      if (image.file) {
-        formData.append("Pictures", image.file, image.file.name);
-      } else {
-        console.warn("No file found for one of the images:", image);
-      }
-    });
-  
-    // Add PropertyId to form data
-    formData.append("PropertyId", id!);
-  
+  const updatePropertyLocation = async () => {
+    if (!id) return; // Ensure id is defined
+    
     try {
-      const response = await axios.put(`${API_BASE_URL}/PropertyPicture/${id}`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      console
-      if (response.status === 200) {
-        setActiveStep((prev) => prev + 1);
-      } else {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+      const storedLocation = JSON.parse(localStorage.getItem("propertyLocation") || "{}");
+      if (storedLocation.latitude && storedLocation.longitude) {
+        await axios.put(`${API_BASE_URL}/Property/${id}`, {
+          ...formData,
+          latitude: storedLocation.latitude,
+          longitude: storedLocation.longitude,
+        });
+        setSuccess("Propriété mise à jour avec succès!");
       }
     } catch (err) {
-      if (err instanceof AxiosError) {
-        setError(`Erreur lors de l'envoi des images: ${err.response?.data.errors.file[0]}`);
-      }
+      setError("Une erreur est survenue lors de la mise à jour de la location.");
     }
   };
-  
-  
-  const updatePropertyLocation = async () => {
-    if (id !== null) {
-      try {
-        const storedLocation = JSON.parse(localStorage.getItem("propertyLocation") || "{}");
-        if (storedLocation.latitude && storedLocation.longitude) {
-          await axios.put(`${API_BASE_URL}/Property/${id}`, {
-            ...formData,
-            latitude: storedLocation.latitude,
-            longitude: storedLocation.longitude,
-          });
-          setSuccess("Propriété mise à jour avec succès!");
-        }
-      } catch (err) {
-        setError("Une erreur est survenue lors de la mise à jour de la location.");
-      }
-    }
+
+  const saveLocationData = (data: any) => {
+    setLocationData(data);
+    localStorage.setItem('propertyLocation', JSON.stringify(data));
   };
+
+  const loadLocationData = () => {
+    const storedData = localStorage.getItem('propertyLocation');
+    return storedData ? JSON.parse(storedData) : null;
+  };
+
   const handleRadioChange = (value: boolean) => {
     setFormData({ ...formData, terrain: value });
-};
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -302,7 +339,32 @@ const UpdateProperties: React.FC = () => {
         </div>
       )}
 
-      {activeStep === 1 && <Setpictures onImagesChange={setImages} />}
+{activeStep === 1 && (
+  <div>
+    <Typography variant="h6">Ajouter ou Modifier les photos</Typography>
+    <div className="flex flex-wrap">
+    {currentPictures.map((picture: any) => (
+  <div key={picture.Id} className="relative m-2">
+    <img src={picture.picturePath} alt={`Property Image ${picture.id}`} className="w-40 h-40 object-cover" />
+    <button
+      onClick={() => {
+        console.log(`Clicked picture ID: ${picture.id}`); // Debugging line
+        setSelectedPictureId(picture.id);
+        console.log('tklikit',)
+        handleEditPicture(picture.id);
+        console.log(picture.id)
+      }} // Set selected picture ID
+      className="absolute top-0 right-0 p-2 bg-red-500 text-white rounded"
+    >
+      Modifier
+    </button>
+  </div>
+))}
+
+    </div>
+    
+  </div>
+)}
       {activeStep === 2 && <PropertyMap onLocationSave={saveLocationData} locationData={loadLocationData()} />}
       {activeStep === 3 && <Typography variant="h6">Confirmer la Location</Typography>}
 
