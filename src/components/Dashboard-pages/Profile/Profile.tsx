@@ -18,7 +18,6 @@ const Profile: React.FC = () => {
   const [success, setSuccess] = useState<string | null>(null); 
   const [promoterPicture, setPromoterPicture] = useState<string>(imageavatar); 
 
-  // Fetch promoter data when component mounts
   useEffect(() => {
     const fetchPromoterData = async () => {
       try {
@@ -33,45 +32,39 @@ const Profile: React.FC = () => {
           picture: promoter.picture || imageavatar,
         });
       } catch (error) {
-        console.error('Error fetching promoter data:', error);
-        setError('Error fetching promoter data.');
+        console.error('Erreur lors de la récupération des données du promoteur:', error);
+        setError('Erreur lors de la récupération des données du promoteur.');
       }
     };
 
     fetchPromoterData();
   }, []);
 
-  // Fetch promoter picture data when component mounts
-  // Fetch promoter picture data when component mounts
-useEffect(() => {
-  const fetchPromoterPictureData = async () => {
-    try {
-      const response = await axios.get('http://propelo.runasp.net/api/PromoterPicture/22');
-      const promoterPictureData = response.data;
+  useEffect(() => {
+    const fetchPromoterPictureData = async () => {
+      try {
+        const response = await axios.get('http://propelo.runasp.net/api/PromoterPicture/1');
+        const promoterPictureData = response.data;
 
-      // Assuming the picturePath is a public URL
-      if (promoterPictureData.picturePath) {
-        setPromoterPicture(promoterPictureData.picturePath); 
-      } else {
-        setPromoterPicture(imageavatar); // Fallback image
+        if (promoterPictureData.picturePath) {
+          setPromoterPicture(promoterPictureData.picturePath); 
+        } else {
+          setPromoterPicture(imageavatar); 
+        }
+      } catch (error) {
+        console.error('Erreur lors de la récupération de l\'image du promoteur:', error);
+        setError('Erreur lors de la récupération de l\'image du promoteur.');
       }
-    } catch (error) {
-      console.error('Error fetching promoter picture:', error);
-      setError('Error fetching promoter picture.');
-    }
-  };
+    };
 
-  fetchPromoterPictureData();
-}, []);
+    fetchPromoterPictureData();
+  }, []);
 
-
-  // Handle input changes
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Handle image selection
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
@@ -84,23 +77,21 @@ useEffect(() => {
     try {
       const promoterId = 1; 
 
-      // If an image is selected, submit it first
       if (selectedImage) {
         const formDataForImage = new FormData();
         formDataForImage.append('Picture', selectedImage);
         formDataForImage.append('PromoterId', promoterId.toString());
 
-        const imageResponse = await axios.put('http://propelo.runasp.net/api/PromoterPicture/22', formDataForImage, {
+        const imageResponse = await axios.put('http://propelo.runasp.net/api/PromoterPicture/1', formDataForImage, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
 
-        console.log("Image submission response:", imageResponse);
-        setSuccess('Profile picture updated successfully!');
+        console.log("Réponse de soumission de l'image:", imageResponse);
+        setSuccess('Photo de profil mise à jour avec succès!');
       }
 
-      // Update promoter data
       const promoterResponse = await axios.put('http://propelo.runasp.net/api/Promoter/1', {
         id: promoterId, 
         firstName: formData.firstName,
@@ -110,21 +101,21 @@ useEffect(() => {
         address: formData.address,
       });
 
-      console.log("Promoter update response:", promoterResponse);
-      setSuccess('Profile successfully updated!');
+      console.log("Réponse de mise à jour du promoteur:", promoterResponse);
+      setSuccess('Profil mis à jour avec succès!');
     } catch (error) {
-      console.error('Error updating profile:', error);
+      console.error('Erreur lors de la mise à jour du profil:', error);
 
       if (axios.isAxiosError(error)) {
         if (error.response) {
-          setError(`Error: ${error.response.data.message || error.message}`);
+          setError(`Erreur: ${error.response.data.message || error.message}`);
         } else if (error.request) {
-          setError('No response received from the server.');
+          setError('Aucune réponse reçue du serveur.');
         } else {
-          setError(`Error: ${error.message}`);
+          setError(`Erreur: ${error.message}`);
         }
       } else {
-        setError('An unexpected error occurred.');
+        setError('Une erreur inattendue s\'est produite.');
       }
     }
   };
@@ -132,19 +123,19 @@ useEffect(() => {
   return (
     <div className="main-container ml-48 mt-16 p-4 px-5 h-full flex flex-col items-start">
       <Typography variant="h4" component="h1" className="font-almarai font-bold text-textcolor">
-        Profile
+        Profil
       </Typography>
       <Typography variant="h6" component="h2" className="mt-4">
-        Edit profile
+        Modifier le profil
       </Typography>
       <Typography variant="body2" className="mb-8">
-        Make changes to your profile here. Click save when you're done.
+        Faites des modifications à votre profil ici. Cliquez sur "Enregistrer" lorsque vous avez terminé.
       </Typography>
 
       <Grid container spacing={3} alignItems="center">
         <Grid item xs={15} sm={5} position="relative">
           <Avatar
-            alt="Profile Picture"
+            alt="Photo de profil"
             src={promoterPicture} 
             sx={{ width: 100, height: 100, border: '2px dashed #ccc' }}
           />
@@ -158,7 +149,7 @@ useEffect(() => {
           <label htmlFor="icon-button-file">
             <IconButton
               color="primary"
-              aria-label="upload picture"
+              aria-label="télécharger une image"
               component="span"
               sx={{ position: 'absolute', bottom: 0, right: 0 }}
             >
@@ -182,7 +173,7 @@ useEffect(() => {
             <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
-                label="First Name"
+                label="Prénom"
                 variant="outlined"
                 name="firstName"
                 value={formData.firstName}
@@ -192,7 +183,7 @@ useEffect(() => {
             <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
-                label="Last Name"
+                label="Nom"
                 variant="outlined"
                 name="lastName"
                 value={formData.lastName}
@@ -202,7 +193,7 @@ useEffect(() => {
             <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
-                label="Phone Number"
+                label="Numéro de téléphone"
                 variant="outlined"
                 name="phoneNumber"
                 value={formData.phoneNumber}
@@ -212,7 +203,7 @@ useEffect(() => {
             <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
-                label="Address"
+                label="Adresse"
                 variant="outlined"
                 name="address"
                 value={formData.address}
@@ -224,11 +215,9 @@ useEffect(() => {
       </Grid>
 
       <Box display="flex" justifyContent="space-between" width="100%" mt={4}>
-        <Button variant="outlined" color="info">
-          Exit
-        </Button>
+        
         <Button variant="contained" color="primary" onClick={handleSubmit}>
-          Save
+          Enregistrer
         </Button>
       </Box>
 

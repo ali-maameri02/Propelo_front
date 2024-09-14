@@ -4,6 +4,7 @@ import Avatar from '@mui/material/Avatar';
 import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
+import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import SalesChart from "./Dashboard-components/SalesChart";
 import Statisics from "./Dashboard-components/Statistics-cards";
 import { Slide } from "react-awesome-reveal";
@@ -45,6 +46,7 @@ const Dashboard: React.FC<DashboardProps> = ({ id }) => {
 
         // Fetch promoter picture data
         fetchPromoterPictureData(promoter.promoterId);
+        setAlertVisible(false)
       } catch (error) {
         console.error('Error fetching promoter data:', error);
         setAlertVisible(true);
@@ -56,7 +58,7 @@ const Dashboard: React.FC<DashboardProps> = ({ id }) => {
 
   const fetchPromoterPictureData = async (promoterId: number) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/PromoterPicture/22`);
+      const response = await axios.get(`${API_BASE_URL}/PromoterPicture/1`);
       const promoterPictureData = response.data;
 
       if (promoterPictureData.picturePath) {
@@ -87,7 +89,7 @@ const Dashboard: React.FC<DashboardProps> = ({ id }) => {
           </div>
 
           <Slide direction="left">
-            <div className="user-profile-view p-2 bg-[#fff] rounded-[6px] border-solid border border-[#e5e7eb] relative shadow-[0_4px_4px_0_rgba(174,174,174,0.25)]">
+            <div className="user-profile-view p-2 px-4 w-auto bg-[#fff] rounded-[6px] border-solid border border-[#e5e7eb] relative shadow-[0_4px_4px_0_rgba(174,174,174,0.25)]">
               <div className="flex flex-row row">
                 <Avatar alt={promoter?.firstName || "Admin"} src={promoterPicture} />
                 <div className="column-details flex flex-col ml-2 w-[100%]">
@@ -102,9 +104,10 @@ const Dashboard: React.FC<DashboardProps> = ({ id }) => {
                     {promoter?.phoneNumber || "Téléphone non encore fourni"}
                     <LocalPhoneOutlinedIcon className="text-gray-400 font-almarai text-sm" />
                   </span>
-                  <span className="w-[100%] flex flex-row justify-start items-start text-gray-400 px-2">
-                    <CalendarMonthOutlinedIcon className="text-gray-400 font-almarai text-sm" />
-                    {`joindre : ${promoter?.email || "Email non encore fourni"}`}
+                  <span className="w-[100%] flex flex-row justify-between items-start text-gray-400 px-2">
+                    {` ${promoter?.email || "Email non encore fourni"}`}
+                    <EmailOutlinedIcon className="text-gray-400 font-almarai text-sm" />
+
                   </span>
                 </div>
               </div>

@@ -24,7 +24,6 @@ export const Home: React.FC = () => {
         // Fetch pictures for each apartment
         const picturePromises = response.data.map(async (apartment: any) => {
           const pictureResponse = await axios.get(`http://propelo.runasp.net/api/ApartmentPicture/apartment/${apartment.id}`);
-          console.log(pictureResponse)
           return {
             id: apartment.id,
             pictures: pictureResponse.data.map((pic: any) => pic.picturePath)
@@ -109,12 +108,12 @@ export const Home: React.FC = () => {
                     />
                   </div>
                 )}
-                <div className="details flex flex-col w-100">
+                <div className="details flex flex-col ">
                 <span className="font-semibold">{apartment.name}</span>
                 <span className="text-sm text-gray-500">{`Type: ${apartment.type}`}</span>
                 <span className="text-sm text-gray-500">{`Floor: ${apartment.floor}`}</span>
                 <span className="text-sm text-gray-500">{`Surface: ${apartment.surface} sqm`}</span>
-                <span className="text-sm text-gray-400">{`Description: ${apartment.description}`}</span>
+                {/* <span className="text-sm text-gray-400">{`Description: ${apartment.description}`}</span> */}
                 </div>
               </div>
             </div>

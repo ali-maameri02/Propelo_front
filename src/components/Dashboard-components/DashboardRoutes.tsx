@@ -10,6 +10,7 @@ import AddPropertie from '../Dashboard-pages/Properities/AddPropertie';
 import Commandes from '../Dashboard-pages/Commnandes/Commandes';
 import Profile from '../Dashboard-pages/Profile/Profile';
 import Help from '../Dashboard-pages/Help/Help';
+import UpdateApartemnts from '../Dashboard-pages/Appartements/UpdateApartemnts';
 import UpdateProperties from '../Dashboard-pages/Properities/UpdateProperties';
 const DashboardRoutes: React.FC = () => {
   return (
@@ -21,6 +22,8 @@ const DashboardRoutes: React.FC = () => {
     <Route path="/" element={<Dashboard id={1} />} />
     <Route path="/profile" element={<Profile />} />
     <Route path="/apartments" element={<Apartments />}>
+    <Route path="update/:id" element={<UpdateApartemnts />} />
+
         <Route path="AddApartments" element={<AddAppartement />} />
     </Route>
     <Route path="/properties" element={<Properities />}>

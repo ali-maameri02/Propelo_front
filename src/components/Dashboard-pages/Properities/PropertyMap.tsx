@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
 import L, { LatLngTuple } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import markerIconUrl from '../../../assets/icons8-map-marker.gif'; // Ensure this path is correct
+import markerIconUrl from '../../../assets/icons8-map-marker-ezgif.com-gif-maker.gif'; // Ensure this path is correct
 import { OpenStreetMapProvider, GeoSearchControl } from 'leaflet-geosearch';
 import 'leaflet-geosearch/dist/geosearch.css';
 import satelliteThumbnail from '../../../assets/satellite-thumbnail.jpg'; 

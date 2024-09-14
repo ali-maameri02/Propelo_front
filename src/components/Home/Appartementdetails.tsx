@@ -72,7 +72,7 @@ const AppartementDetails: React.FC = () => {
 
   const fetchPromoterPictureData = async (promoterId: number) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/PromoterPicture/22`);
+      const response = await axios.get(`${API_BASE_URL}/PromoterPicture/1`);
       const promoterPictureData = response.data;
       setPromoterPicture(promoterPictureData.picturePath || '/static/images/avatar/1.jpg');
     } catch (error) {
@@ -214,7 +214,7 @@ const AppartementDetails: React.FC = () => {
                 <TextField
                   label="Name"
                   name="name"
-                  value={contactForm.name}
+                  // value={contactForm.name}
                   onChange={handleInputChange}
                   variant="outlined"
                   fullWidth

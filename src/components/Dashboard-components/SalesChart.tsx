@@ -1,75 +1,68 @@
-import React from 'react';
-import { BarChart } from '@mui/x-charts/BarChart';
+import React, { useEffect, useState } from 'react';
+import { PieChart, Pie, Cell, Legend, Tooltip } from 'recharts'; // Recharts library for pie chart
 import { Slide } from "react-awesome-reveal";
-
 import { Box, Typography } from '@mui/material';
+import { fetchSoldApartmentsData } from '../Dashboard-pages/utils/apiUtils'; // Adjust path if necessary
 import '../style.css';
 
-interface DataItem {
+// Define the data type for the pie chart
+interface PieChartData {
   name: string;
-  current: number;
-  previous: number;
+  value: number;
 }
 
-const data: DataItem[] = [
-  { name: '01', current: 400, previous: 240 },
-  { name: '02', current: 300, previous: 139 },
-  { name: '03', current: 200, previous: 980 },
-  { name: '04', current: 278, previous: 390 },
-  { name: '05', current: 189, previous: 480 },
-  { name: '06', current: 239, previous: 380 },
-  { name: '07', current: 349, previous: 430 },
-  { name: '08', current: 450, previous: 210 },
-  { name: '09', current: 300, previous: 410 },
-  { name: '10', current: 400, previous: 240 },
-  { name: '11', current: 350, previous: 400 },
-  { name: '12', current: 480, previous: 360 },
-];
-
 const SalesChart: React.FC = () => {
+  const [data, setData] = useState<PieChartData[]>([]);
+
+  useEffect(() => {
+    const loadData = async () => {
+      const { sold, unsold } = await fetchSoldApartmentsData();
+      setData([
+        { name: 'Vendu', value: sold },   // Translated 'Sold' to 'Vendu'
+        { name: 'Invendu', value: unsold }, // Translated 'Unsold' to 'Invendu'
+      ]);
+    };
+
+    loadData();
+  }, []);
+
+  // Colors for the pie chart segments
+  const COLORS = ['#2563EB', '#b1b4be'];
+
   return (
     <Slide className="" direction="up">
-
-    <Box className="relative h-96 w-full">
-      <Slide>
-         <Typography variant="h6" gutterBottom>
-        Sales
-      </Typography>
-      </Slide>
-      <Slide delay={50}>
-
-      <Typography variant="h4" gutterBottom>
-        DZD 7,852,000
-      </Typography></Slide>
-
-      <Slide direction='left' delay={150}>
-      <Typography variant="body1" color="green">
-        2.3% vs last week
-      </Typography></Slide>
-      <Box className="chart-container">
-        
-      <BarChart
-          xAxis={[
-            {
-              data: data.map((item) => item.name),
-              scaleType: 'band',
-            },
-          ]}
-          series={[
-            { data: data.map((item) => item.current), label: 'Last 8 days', color: '#2563EB' },
-            { data: data.map((item) => item.previous), label: 'Last Week', color: '#d3d3d3' },
-          ]}
-          width={1000}
-          height={400}
-          margin={{ top: 20, right: 30, bottom: 80, left: 100 }} // Increased bottom margin
-          legend={{
-            position: { vertical: 'bottom', horizontal: 'middle' },
-            direction: 'row',
-            // Align the items in the center
-          }}
-        />
+      <Box className="relative h-96 w-full">
+        <Slide>
+          <Typography variant="h6" gutterBottom>
+            Appartements Vendus vs Invendus {/* Translated 'Apartments Sold vs Unsold' */}
+          </Typography>
+        </Slide>
+        <Slide delay={50} className='w-100'>
+          <Typography variant="h4" className='flex flex-row w-100' gutterBottom>
+            {/* Placeholder for total sales, adjust as needed */}
+            Total des Appartements: {data.reduce((sum, item) => sum + item.value, 0)} {/* Translated 'Total Apartments' */}
+          </Typography>
+        </Slide>
+        <Box className="chart-container">
+          <PieChart width={1000} height={400}>
+            <Pie
+              data={data}
+              dataKey="value"
+              nameKey="name"
+              outerRadius={150}
+              fill="#8884d8"
+              label
+            >
+              {data.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Pie>
+            <Legend />
+            <Tooltip />
+          </PieChart>
+        </Box>
       </Box>
-    </Box></Slide>
+    </Slide>
   );
 };
 

@@ -218,7 +218,7 @@ const UpdateProperties: React.FC = () => {
         <div>
           <Typography variant="h6">Modifier les détails de la propriété</Typography>
           <form className="w-[70vw] ml-5 mt-5 h-full flex flex-row justify-between">
-      <div className="group-inputs-left flex flex-col justify-around space-y-4 w-full md:w-1/2 mr-5">
+                      <div className="group-inputs-left  flex flex-col justify-around  w-full md:w-1/2 mr-5">
         <div className="group-input flex flex-col md:flex-row items-center font-almarai">
           <label htmlFor="name" className="mr-2 w-36">Nom</label>
           <input
@@ -230,7 +230,7 @@ const UpdateProperties: React.FC = () => {
             className="w-full border-2 rounded-lg border-gray-300 p-2 focus:outline-none focus:border-text-color1"
           />
         </div>
-        <div className="group-input flex flex-col md:flex-row items-center font-almarai">
+                          <div className="group-input mt-2 flex flex-col md:flex-row items-center font-almarai">
           <label htmlFor="city" className="mr-2 w-36">Ville</label>
           <input
             type="text"
@@ -241,7 +241,7 @@ const UpdateProperties: React.FC = () => {
             className="w-full border-2 rounded-lg border-gray-300 p-2 focus:outline-none focus:border-text-color1"
           />
         </div>
-        <div className="group-input flex flex-col md:flex-row items-center font-almarai">
+                          <div className="group-input mt-2 flex flex-col md:flex-row items-center font-almarai">
           <label htmlFor="address" className="mr-2 w-36">Adresse</label>
           <input
             type="text"
@@ -252,59 +252,13 @@ const UpdateProperties: React.FC = () => {
             className="w-full border-2 rounded-lg border-gray-300 p-2 focus:outline-none focus:border-text-color1"
           />
         </div>
-        <div className="group-input flex flex-col md:flex-row items-center font-almarai">
+                          <div className="group-input mt-2 flex flex-col md:flex-row items-center font-almarai">
           <label htmlFor="state" className="mr-2 w-36">État</label>
           <input
             type="text"
             name="state"
             id="state"
             value={formData.state}
-            onChange={handleChange}
-            className="w-full border-2 rounded-lg border-gray-300 p-2 focus:outline-none focus:border-text-color1"
-          />
-        </div>
-      </div>
-
-      <div className="group-inputs-right flex flex-col justify-around space-y-4 w-full md:w-1/2 mr-5">
-        <div className="group-input flex flex-col md:flex-row items-center font-almarai">
-          <label htmlFor="description" className="mr-2 w-36">Description</label>
-          <textarea
-            name="description"
-            id="description"
-            value={formData.description}
-            onChange={handleTextareaChange}
-            className="w-full border-2 rounded-lg border-gray-300 p-2 focus:outline-none focus:border-text-color1"
-          />
-        </div>
-        <div className="group-input flex flex-col md:flex-row items-center font-almarai">
-          <label htmlFor="apartmentsNumber" className="mr-2 w-36">Nombre d'appartements</label>
-          <input
-            type="number"
-            name="apartmentsNumber"
-            id="apartmentsNumber"
-            value={formData.apartmentsNumber}
-            onChange={handleChange}
-            className="w-full border-2 rounded-lg border-gray-300 p-2 focus:outline-none focus:border-text-color1"
-          />
-        </div>
-        <div className="group-input flex flex-col md:flex-row items-center font-almarai">
-          <label htmlFor="constructionDate" className="mr-2 w-36">Date de construction</label>
-          <input
-            type="date"
-            name="constructionDate"
-            id="constructionDate"
-            value={formData.constructionDate}
-            onChange={handleChange}
-            className="w-full border-2 rounded-lg border-gray-300 p-2 focus:outline-none focus:border-text-color1"
-          />
-        </div>
-        <div className="group-input flex flex-col md:flex-row items-center font-almarai">
-          <label htmlFor="endConstructionDate" className="mr-2 w-36">Date de fin de construction</label>
-          <input
-            type="date"
-            name="endConstructionDate"
-            id="endConstructionDate"
-            value={formData.endConstructionDate}
             onChange={handleChange}
             className="w-full border-2 rounded-lg border-gray-300 p-2 focus:outline-none focus:border-text-color1"
           />
@@ -334,6 +288,54 @@ const UpdateProperties: React.FC = () => {
             </label>
           </div>
         </div>
+      </div>
+
+                          <div className="group-inputs-left  flex flex-col justify-around  w-full md:w-1/2 mr-5">
+      
+        <div className="group-input flex flex-col md:flex-row items-center font-almarai">
+          <label htmlFor="apartmentsNumber" className="mr-2 w-36">Nombre d'appartements</label>
+          <input
+            type="number"
+            name="apartmentsNumber"
+            id="apartmentsNumber"
+            value={formData.apartmentsNumber}
+            onChange={handleChange}
+            className="w-full border-2 rounded-lg border-gray-300 p-2 focus:outline-none focus:border-text-color1"
+          />
+        </div>
+        <div className="group-input mt-1 flex flex-col md:flex-row items-center font-almarai">
+          <label htmlFor="constructionDate" className="mr-2 w-36">Date de construction</label>
+          <input
+            type="date"
+            name="constructionDate"
+            id="constructionDate"
+            value={formData.constructionDate}
+            onChange={handleChange}
+            className="w-full border-2 rounded-lg border-gray-300 p-2 focus:outline-none focus:border-text-color1"
+          />
+        </div>
+        <div className="group-input mt-1 flex flex-col md:flex-row items-center font-almarai">
+          <label htmlFor="endConstructionDate" className="mr-2 w-36">Date de fin de construction</label>
+          <input
+            type="date"
+            name="endConstructionDate"
+            id="endConstructionDate"
+            value={formData.endConstructionDate}
+            onChange={handleChange}
+            className="w-full border-2 rounded-lg border-gray-300 p-2 focus:outline-none focus:border-text-color1"
+          />
+        </div>
+        <div className="group-input mt-1 flex flex-col md:flex-row items-center font-almarai">
+          <label htmlFor="description" className="mr-2 w-36">Description</label>
+          <textarea
+            name="description"
+            id="description"
+            value={formData.description}
+            onChange={handleTextareaChange}
+            className="w-full border-2 rounded-lg border-gray-300 p-2 focus:outline-none focus:border-text-color1"
+          />
+        </div>
+    
       </div>
     </form>
         </div>
@@ -368,7 +370,7 @@ const UpdateProperties: React.FC = () => {
       {activeStep === 2 && <PropertyMap onLocationSave={saveLocationData} locationData={loadLocationData()} />}
       {activeStep === 3 && <Typography variant="h6">Confirmer la Location</Typography>}
 
-      <div className="mt-4">
+      <div className="mt-4 w-full flex flex-row justify-between items-center">
         <button
           onClick={handleBack}
           disabled={activeStep === 0}

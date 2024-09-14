@@ -324,50 +324,31 @@ console.log("propid", id)
                 {activeStep === 0 && (
                     <div>
                         {/* Render form for property details */}
-                        <Typography variant="h6">Enter Property Details</Typography>
-                        <form className="w-[70vw] ml-5 mt-5 h-full flex flex-row md:flex-row justify-between">
-                      <div className="group-inputs-left flex flex-col justify-around space-y-4 w-full md:w-1/2 mr-5">
+                        <Typography variant="h6">Saisir les détails de la propriété</Typography>
+                        <form className="w-full mt-5 h-full flex flex-row md:flex-row justify-between">
+                      <div className="group-inputs-left  flex flex-col justify-around  w-full md:w-1/2 mr-5">
                           <div className="group-input flex flex-col md:flex-row items-center font-almarai">
-                              <label htmlFor="name" className="mr-2 w-36">Nom</label>
+                              <label htmlFor="name" className="mr-2 w-full">Nom</label>
                               <input type="text" name="name" id="name" value={formData.name} onChange={handleChange} className="w-full border-2 rounded-lg border-gray-300 p-2 focus:outline-none focus:border-text-color1" />
                           </div>
-                          <div className="group-input flex flex-col md:flex-row items-center font-almarai">
-                              <label htmlFor="city" className="mr-2 w-36">Ville</label>
+                          <div className="group-input mt-2 flex flex-col md:flex-row items-center font-almarai">
+                              <label htmlFor="city" className="mr-2 w-full">Ville</label>
                               <input type="text" name="city" id="city" value={formData.city} onChange={handleChange} className="w-full border-2 rounded-lg border-gray-300 p-2 focus:outline-none focus:border-text-color1" />
                           </div>
-                          <div className="group-input flex flex-col md:flex-row items-center font-almarai">
-                              <label htmlFor="address" className="mr-2 w-36">Adresse</label>
+                          <div className="group-input mt-2 flex flex-col md:flex-row items-center font-almarai">
+                              <label htmlFor="address" className="mr-2 w-full">Adresse</label>
                               <input type="text" name="address" id="address" value={formData.address} onChange={handleChange} className="w-full border-2 rounded-lg border-gray-300 p-2 focus:outline-none focus:border-text-color1" />
                           </div>
-                          <div className="group-input flex flex-col md:flex-row items-center font-almarai">
-                              <label htmlFor="state" className="mr-2 w-36">État</label>
+                          <div className="group-input mt-2 flex flex-col md:flex-row items-center font-almarai">
+                              <label htmlFor="state" className="mr-2 w-full">Nombres Des Étages</label>
                               <input type="text" name="state" id="state" value={formData.state} onChange={handleChange} className="w-full border-2 rounded-lg border-gray-300 p-2 focus:outline-none focus:border-text-color1" />
                           </div>
-                          </div>
-                          <div className="group-inputs-right flex flex-col justify-around space-y-4 w-full md:w-1/2 mr-5">
-
-                          <div className="group-input flex flex-col md:flex-row items-center font-almarai">
-                              <label htmlFor="description" className="mr-2 w-36">Description</label>
-                              <textarea name="description" id="description" value={formData.description}   onChange={handleTextareaChange}  // Use textarea handler
- className="w-full border-2 rounded-lg border-gray-300 p-2 focus:outline-none focus:border-text-color1" />
-                          </div>
-                          <div className="group-input flex flex-col md:flex-row items-center font-almarai">
-                              <label htmlFor="apartmentsNumber" className="mr-2 w-36">Nombre d'appartements</label>
-                              <input type="number" name="apartmentsNumber" id="apartmentsNumber" value={formData.apartmentsNumber} onChange={handleChange} className="w-full border-2 rounded-lg border-gray-300 p-2 focus:outline-none focus:border-text-color1" />
-                          </div>
-                          <div className="group-input flex flex-col md:flex-row items-center font-almarai">
-                              <label htmlFor="constractionDate" className="mr-2 w-36">Date de construction</label>
-                              <input type="date" name="constractionDate" id="constractionDate" value={formData.constractionDate} onChange={handleChange} className="w-full border-2 rounded-lg border-gray-300 p-2 focus:outline-none focus:border-text-color1" />
-                          </div>
-                          <div className="group-input flex flex-col md:flex-row items-center font-almarai">
-                              <label htmlFor="endConstractionDate" className="mr-2 w-36">Date de fin de construction</label>
-                              <input type="date" name="endConstractionDate" id="endConstractionDate" value={formData.endConstractionDate} onChange={handleChange} className="w-full border-2 rounded-lg border-gray-300 p-2 focus:outline-none focus:border-text-color1" />
-                          </div>
-                          <div className="group-input flex flex-col md:flex-row items-center font-almarai">
-                              <label className="mr-2 w-36">Terrain</label>
+                          <div className="group-input mt-2 flex flex-col md:flex-row justify-start items-center font-almarai ">
+                              <label className="mr-2 w-64">Terrain</label>
                               <div className="flex items-center">
                                   <label className="mr-4">
                                       <input
+                                      
                                           type="radio"
                                           name="terrain"
                                           value="true"
@@ -387,6 +368,28 @@ console.log("propid", id)
                                       Non
                                   </label>
                               </div>
+                          </div>
+                          </div>
+                          <div className="group-inputs-left  flex flex-col justify-around  w-full md:w-1/2 mr-5">
+                         
+                        
+                          <div className="group-input  flex flex-col md:flex-row items-center font-almarai">
+                              <label htmlFor="apartmentsNumber" className="mr-2 w-full">Nombre d'apartements</label>
+                              <input type="number" name="apartmentsNumber" id="apartmentsNumber" value={formData.apartmentsNumber} onChange={handleChange} className="w-full border-2 rounded-lg border-gray-300 p-2 focus:outline-none focus:border-text-color1" />
+                          </div>
+                          <div className="group-input mt-1 flex flex-col md:flex-row items-center font-almarai">
+                              <label htmlFor="constractionDate" className="mr-2 w-full">Date de construction</label>
+                              <input type="date" name="constractionDate" id="constractionDate" value={formData.constractionDate} onChange={handleChange} className="w-full border-2 rounded-lg border-gray-300 p-2 focus:outline-none focus:border-text-color1" />
+                          </div>
+                          <div className="group-input mt-1 flex flex-col md:flex-row items-center font-almarai">
+                              <label htmlFor="endConstractionDate" className="mr-2 w-full">Date de fin de construction</label>
+                              <input type="date" name="endConstractionDate" id="endConstractionDate" value={formData.endConstractionDate} onChange={handleChange} className="w-full border-2 rounded-lg border-gray-300 p-2 focus:outline-none focus:border-text-color1" />
+                          </div>
+                         
+                          <div className="group-input mt-1 flex flex-col justify-around md:flex-row items-center font-almarai">
+                              <label htmlFor="description" className="mr-2 w-full">Description</label>
+                              <textarea name="description" id="description" value={formData.description}   onChange={handleTextareaChange}  // Use textarea handler
+ className="w-full border-2 rounded-lg border-gray-300 p-2 focus:outline-none focus:border-text-color1" />
                           </div>
                           </div>
                   
@@ -415,12 +418,12 @@ console.log("propid", id)
   disableLayerControl={false} 
   hideLayerControl={true} 
 /> 
-                        <Typography>{JSON.stringify(locationData)}</Typography>
                     </div>
                 )}
-                <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+                <Box  sx={{ display: 'flex', flexDirection: 'row', pt: 2 , justifyContent:'space-between' }}>
                     <Button
                         color="inherit"
+                        variant="contained"
                         disabled={activeStep === 0}
                         onClick={handleBack}
                         sx={{ mr: 1 }}
@@ -431,7 +434,8 @@ console.log("propid", id)
                     {activeStep === steps.length ? (
                         <Button onClick={handleReset}>Reset</Button>
                     ) : (
-                        <Button onClick={handleNext}>
+                        <Button onClick={handleNext}                         variant="contained"
+                        >
                             {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
                         </Button>
                     )}

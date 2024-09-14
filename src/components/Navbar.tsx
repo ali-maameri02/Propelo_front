@@ -28,7 +28,7 @@ const Navbar: React.FC = () => {
 
     const fetchPromoterPictureData = async (promoterId: number) => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/PromoterPicture/22`);
+        const response = await axios.get(`${API_BASE_URL}/PromoterPicture/1`);
         const promoterPictureData = response.data;
 
         if (promoterPictureData.picturePath) {

@@ -29,7 +29,7 @@ const Properities: React.FC = () => {
         { field: 'name', headerName: 'Nom', width: 150 },
         { field: 'address', headerName: 'Adresse', width: 200 },
         { field: 'city', headerName: 'Ville', width: 130 },
-        { field: 'state', headerName: 'État', width: 130 },
+        { field: 'state', headerName: 'Étages', width: 130 },
         { field: 'apartmentsNumber', headerName: 'n° Appartements', width: 180 },
         {
             field: 'actions',
@@ -107,9 +107,9 @@ const Properities: React.FC = () => {
                 <>
                     <div className="head w-full flex flex-row justify-between items-center mr-0 py-3 pt-0">
                         <h1 className="font-almarai font-bold text-textcolor">Propriétés</h1>
-                        <div>
+                        <div className="flex flex-row justify-end  w-full">
                             {selectedRows.length > 0 && (
-                                <Button variant="contained" color="error" onClick={handleDeleteSelectedRows}>
+                                <Button variant="contained" sx={{mr:'5rem'}} color="error" onClick={handleDeleteSelectedRows}>
                                     Supprimer sélection
                                 </Button>
                             )}

@@ -56,7 +56,50 @@ export const fetchProperties = async () => {
       return 0; // Return 0 or handle the error as needed
     }
   };
-  
+  export const fetchApartmentssold = async (): Promise<number> => {
+    try {
+        const response = await axios.get('http://propelo.runasp.net/api/Apartment');
+        const data = response.data;
+
+        // Filter apartments where sold is true
+        const soldApartments = data.filter((apartment: any) => apartment.sold === true);
+        
+        // Count unique IDs of sold apartments
+        const apartmentIds = soldApartments.map((apartment: any) => apartment.id);
+        const uniqueApartmentIds = new Set(apartmentIds);
+
+        return uniqueApartmentIds.size;
+    } catch (error) {
+        console.error("Error fetching apartments", error);
+        return 0; // Return 0 or handle the error as needed
+    }
+};
+interface DataItem {
+  name: string;  // e.g., week number or date
+  current: number;  // current period sales
+  previous: number;  // previous period sales
+}
+
+
+export const fetchSoldApartmentsData = async (): Promise<{ sold: number, unsold: number }> => {
+  try {
+    const response = await axios.get('http://propelo.runasp.net/api/Apartment');
+    const apartments = response.data;
+
+    // Calculate the number of sold and unsold apartments
+    const soldCount = apartments.filter((apartment: any) => apartment.sold === true).length;
+    const unsoldCount = apartments.filter((apartment: any) => apartment.sold !== true).length;
+
+    return { sold: soldCount, unsold: unsoldCount };
+  } catch (error) {
+    console.error("Error fetching apartments data", error);
+    return { sold: 0, unsold: 0 }; // Return zero counts on error
+  }
+};
+
+
+
+
   export const fetchOrders = async (): Promise<number> => {
     try {
       const response = await axios.get('http://propelo.runasp.net/api/Order');
