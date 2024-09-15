@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
-import L from 'leaflet';
+import L, { LatLngExpression, LatLngTuple } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import markerIconUrl from '../../../assets/icons8-map-marker-ezgif.com-gif-maker.gif';
 import { OpenStreetMapProvider, GeoSearchControl } from 'leaflet-geosearch';
@@ -8,9 +8,6 @@ import 'leaflet-geosearch/dist/geosearch.css';
 import satelliteThumbnail from '../../../assets/satellite-thumbnail.jpg'; 
 import standardThumbnail from '../../../assets/standard-thumbnail.jpg';
 
-type LatLngTuple = [number, number];
-
-// Define custom icon for the marker
 const createCustomIcon = () => {
     return L.icon({
         iconUrl: markerIconUrl,
@@ -20,19 +17,17 @@ const createCustomIcon = () => {
     });
 };
 
-// Component to center the map on the marker
-const CenterMapOnMarker: React.FC<{ position: LatLngTuple }> = ({ position }) => {
+const CenterMapOnMarker: React.FC<{ position: LatLngExpression }> = ({ position }) => {
     const map = useMap();
     useEffect(() => {
         if (map) {
-            map.setView(position, map.getZoom()); // Maintain the current zoom level
+            map.setView(position, map.getZoom());
         }
     }, [map, position]);
     return null;
 };
 
-// Component to add the search control to the map
-const AddSearchControl: React.FC<{ setMarker: (latlng: LatLngTuple) => void; setPopupText: (text: string) => void }> = ({ setMarker, setPopupText }) => {
+const AddSearchControl: React.FC<{ setMarker: (latlng: LatLngExpression) => void; setPopupText: (text: string) => void }> = ({ setMarker, setPopupText }) => {
     const map = useMap();
 
     useEffect(() => {
@@ -48,12 +43,12 @@ const AddSearchControl: React.FC<{ setMarker: (latlng: LatLngTuple) => void; set
 
         map.addControl(searchControl);
 
-        map.on('geosearch/showlocation', (result: any) => {
-            const { x, y, label } = result.location;
-            const latlng: LatLngTuple = [y, x];
+        map.on('geosearch/showlocation', (event: any) => {
+            const { x, y, label } = event.location;
+            const latlng: LatLngExpression = [y, x];
             setMarker(latlng);
             setPopupText(label);
-            map.setView(latlng, map.getZoom()); // Maintain the current zoom level
+            map.setView(latlng, map.getZoom());
         });
 
         return () => {
@@ -65,7 +60,6 @@ const AddSearchControl: React.FC<{ setMarker: (latlng: LatLngTuple) => void; set
     return null;
 };
 
-// Component to add the map layer control
 const MapLayerControl: React.FC<{ toggleSatelliteView: () => void; isSatelliteView: boolean }> = ({ toggleSatelliteView, isSatelliteView }) => {
     const map = useMap();
 
@@ -97,7 +91,6 @@ const MapLayerControl: React.FC<{ toggleSatelliteView: () => void; isSatelliteVi
     return null;
 };
 
-// Main PropertyMap component
 const PropertyMap: React.FC<{
     onLocationSave?: (data: any) => void;
     locationData?: { latitude: number; longitude: number };
@@ -111,21 +104,20 @@ const PropertyMap: React.FC<{
     disableLayerControl,
     hideLayerControl
 }) => {
-    const [marker, setMarker] = useState<LatLngTuple | null>(locationData ? [locationData.latitude, locationData.longitude] : null);
+    const [marker, setMarker] = useState<LatLngExpression | null>(locationData ? [locationData.latitude, locationData.longitude] : null);
     const [popupText, setPopupText] = useState<string | null>(null);
     const [isSatelliteView, setIsSatelliteView] = useState(false);
-    const [center, setCenter] = useState<LatLngTuple>([28.0339, 1.6596]); // Default center for Algeria
-    const [zoom, setZoom] = useState(6); // Default zoom
+    const [center, setCenter] = useState<LatLngExpression>([28.0339, 1.6596]);
+    const [zoom, setZoom] = useState(6);
 
-    // Handle map events like click
     const MapEventHandler = () => {
         useMapEvents({
             click: (e) => {
-                const latlng: LatLngTuple = [e.latlng.lat, e.latlng.lng];
+                const latlng: LatLngExpression = [e.latlng.lat, e.latlng.lng];
                 setMarker(latlng);
                 setPopupText(`Latitude: ${latlng[0]} Longitude: ${latlng[1]}`);
-                setCenter(latlng); // Update center to clicked location
-                setZoom(13); // Maintain zoom level
+                setCenter(latlng);
+                setZoom(13);
                 if (onLocationSave) {
                     onLocationSave({ latitude: latlng[0], longitude: latlng[1] });
                 }
@@ -134,7 +126,6 @@ const PropertyMap: React.FC<{
         return null;
     };
 
-    // Toggle between satellite and standard view
     const toggleSatelliteView = () => {
         setIsSatelliteView(prevState => !prevState);
     };
@@ -142,14 +133,8 @@ const PropertyMap: React.FC<{
     return (
         <MapContainer
             style={{ height: "500px", width: "100%" }}
-            center={center} // Set initial center
-            zoom={zoom} // Set initial zoom
-            whenReady={() => {
-                // Set initial view after map is ready
-                const mapInstance = useMap().getMap();
-                if (mapInstance) {
-                    mapInstance.setView(center, zoom);
-                }
+            whenReady={({ target }) => {
+                target.setView(center, zoom);
             }}
         >
             <TileLayer
@@ -162,7 +147,11 @@ const PropertyMap: React.FC<{
             {!disableLayerControl && !hideLayerControl && <MapLayerControl toggleSatelliteView={toggleSatelliteView} isSatelliteView={isSatelliteView} />}
             {marker && (
                 <Marker position={marker} icon={createCustomIcon()}>
-                    <Popup>{popupText}</Popup>
+                    <Popup>
+                        <div style={{ width: '20rem', height: 'auto', padding: '1rem', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
+                            {popupText}
+                        </div>
+                    </Popup>
                 </Marker>
             )}
             <CenterMapOnMarker position={center} />
