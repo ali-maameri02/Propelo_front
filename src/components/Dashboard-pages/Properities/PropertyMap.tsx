@@ -1,4 +1,4 @@
-import React, {  useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
 import L, { LatLngTuple } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -155,14 +155,13 @@ const PropertyMap: React.FC<{
 
     return (
         <MapContainer
-        center={center}
-        zoom={zoom}
-        style={{ height: "500px", width: "100%" }}
-        whenReady={() => {
-            mapRef.current = mapRef.current?.getPane('mapPane') as any; // Access the map reference here
-        }}
-    >
-    
+            center={center}
+            zoom={zoom}
+            style={{ height: "500px", width: "100%" }}
+            whenReady={() => {
+                mapRef.current = mapRef.current?.getPane('mapPane') as any; // Access the map reference here
+            }}
+        >
             <TileLayer
                 url={isSatelliteView 
                     ? 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
