@@ -53,12 +53,12 @@ const Commandes: React.FC = () => {
     }
 };
 
-const handleDeleteSelectedRows = () => {
-    if (selectedRow.length > 0) {
-        // Cast selectedRows to number[] (as the selection is the id of the rows)
-        handleDeleteClick(selectedRow as number[]);
-    }
-};
+// const handleDeleteSelectedRows = () => {
+//     if (selectedRow.length > 0) {
+//         // Cast selectedRows to number[] (as the selection is the id of the rows)
+//         handleDeleteClick(selectedRow as number[]);
+//     }
+// };
   const handleClose = () => {
     setOpen(false);
   };

@@ -2,14 +2,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Avatar from '@mui/material/Avatar';
 import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
-import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import SalesChart from "./Dashboard-components/SalesChart";
 import Statisics from "./Dashboard-components/Statistics-cards";
 import { Slide } from "react-awesome-reveal";
 import Alert from '@mui/material/Alert';
-import { fetchApartments , fetchOrders } from "./Dashboard-pages/utils/apiUtils";
 
 interface DashboardProps {
   id: number; // Assuming id is passed as a prop

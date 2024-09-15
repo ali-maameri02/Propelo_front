@@ -6,13 +6,11 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField'; // Import TextField here
-import MenuItem from '@mui/material/MenuItem'; // Import MenuItem if used
 import Setpictures, { ImageType } from '../Properities/Setpictures';
 import Documents, { DocumentType } from './Documents';
-import { fetchLastApartmentId, uploadDocument, fetchProperties } from '../utils/apiUtils';
+import { fetchLastApartmentId, fetchProperties } from '../utils/apiUtils';
 import axios, { AxiosError } from 'axios';
-import { Grid } from '@mui/material';
+// import { Grid } from '@mui/material';
 
 const steps = [
   "Saisir Les Détails De L'Appartement",

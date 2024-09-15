@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Typography from '@mui/material/Typography';
 import { useParams } from 'react-router-dom';
-import { Stepper, Step, StepLabel, Button, Breadcrumbs } from '@mui/material';
-import Setpictures from './Setpictures';
+import { Stepper, Step, StepLabel, Breadcrumbs } from '@mui/material';
+// import Setpictures from './Setpictures';
 import PropertyMap from './PropertyMap';
 
 const steps = [
