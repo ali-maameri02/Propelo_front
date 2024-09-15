@@ -1,16 +1,8 @@
 version: '3.8'
 
 services:
- 
-
   frontend:
     build:
-      context: "./"
-    volumes:
-      - front:/app/dist/
-
-  
-
-volumes:
-  
-  front:
+      context: ./
+    ports:
+      - "80:80"
