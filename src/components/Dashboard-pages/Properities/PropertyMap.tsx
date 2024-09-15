@@ -1,12 +1,16 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
-import L, { LatLngTuple } from 'leaflet';
+import L from 'leaflet';
+// import {Icon} from 'leaflet';
+
 import 'leaflet/dist/leaflet.css';
 import markerIconUrl from '../../../assets/icons8-map-marker-ezgif.com-gif-maker.gif'; // Ensure this path is correct
 import { OpenStreetMapProvider, GeoSearchControl } from 'leaflet-geosearch';
 import 'leaflet-geosearch/dist/geosearch.css';
 import satelliteThumbnail from '../../../assets/satellite-thumbnail.jpg'; 
 import standardThumbnail from '../../../assets/standard-thumbnail.jpg';
+
+type LatLngTuple = [number, number];
 
 // Define custom icon for the marker
 const createCustomIcon = () => {
@@ -17,6 +21,8 @@ const createCustomIcon = () => {
         popupAnchor: [0, -32],
     });
 };
+// L.marker([51.5, -0.09], {icon: createCustomIcon}).addTo(MapContainer);
+
 
 // Component to center the map on the marker
 const CenterMapOnMarker: React.FC<{ position: LatLngTuple }> = ({ position }) => {
@@ -83,7 +89,6 @@ const MapLayerControl: React.FC<{ toggleSatelliteView: () => void; isSatelliteVi
             toggleSatelliteView();
         });
 
-        // Using 'new L.Control()' instead of directly calling 'L.control'
         const layerControl = new L.Control({ position: 'topright' });
         layerControl.onAdd = () => controlDiv;
         layerControl.addTo(map);
@@ -116,25 +121,10 @@ const PropertyMap: React.FC<{
     const [center, setCenter] = useState<LatLngTuple>([28.0339, 1.6596]); // Default center for Algeria
     const [zoom, setZoom] = useState(6); // Default zoom
 
-    const mapRef = useRef<L.Map | null>(null);
-
-    useEffect(() => {
-        if (locationData) {
-            const latlng: LatLngTuple = [locationData.latitude, locationData.longitude];
-            setMarker(latlng);
-            setPopupText(`Latitude: ${latlng[0]} Longitude: ${latlng[1]}`);
-            setCenter(latlng); // Update center to marker location
-            setZoom(13); // Zoom to a level that fits the location
-        } else {
-            setCenter([28.0339, 1.6596]); // Reset to default center
-            setZoom(6); // Default zoom
-        }
-    }, [locationData]);
-
     // Handle map events like click
     const MapEventHandler = () => {
         useMapEvents({
-            click: (e) => {
+            click: (e: { latlng: { lat: number; lng: number; }; }) => {
                 const latlng: LatLngTuple = [e.latlng.lat, e.latlng.lng];
                 setMarker(latlng);
                 setPopupText(`Latitude: ${latlng[0]} Longitude: ${latlng[1]}`);
@@ -155,11 +145,13 @@ const PropertyMap: React.FC<{
 
     return (
         <MapContainer
-            center={center}
-            zoom={zoom}
             style={{ height: "500px", width: "100%" }}
             whenReady={() => {
-                mapRef.current = mapRef.current?.getPane('mapPane') as any; // Access the map reference here
+                // Set initial view after map is ready
+                const mapInstance = useMap().getMap();
+                if (mapInstance) {
+                    mapInstance.setView(center, zoom);
+                }
             }}
         >
             <TileLayer
@@ -171,7 +163,7 @@ const PropertyMap: React.FC<{
             <MapEventHandler />
             {!disableLayerControl && !hideLayerControl && <MapLayerControl toggleSatelliteView={toggleSatelliteView} isSatelliteView={isSatelliteView} />}
             {marker && (
-                <Marker position={marker} icon={createCustomIcon()}>
+                <Marker position={marker} >
                     <Popup>{popupText}</Popup>
                 </Marker>
             )}

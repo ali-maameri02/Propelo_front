@@ -1,5 +1,6 @@
 import { useMapEvents } from 'react-leaflet';
-import  { LatLngTuple } from 'leaflet';
+
+type LatLngTuple = [number, number];
 
 interface MapEventsProps {
   addMarker: (latlng: LatLngTuple) => void;
@@ -7,7 +8,7 @@ interface MapEventsProps {
 
 const MapEvents: React.FC<MapEventsProps> = ({ addMarker }) => {
   useMapEvents({
-    click(e) {
+    click(e: { latlng: any; }) {
       const { latlng } = e;
       addMarker([latlng.lat, latlng.lng]);
     },
@@ -15,3 +16,5 @@ const MapEvents: React.FC<MapEventsProps> = ({ addMarker }) => {
 
   return null;
 };
+
+export default MapEvents;
