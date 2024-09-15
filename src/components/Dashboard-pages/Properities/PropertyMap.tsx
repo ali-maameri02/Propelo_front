@@ -83,7 +83,8 @@ const MapLayerControl: React.FC<{ toggleSatelliteView: () => void; isSatelliteVi
             toggleSatelliteView();
         });
 
-        const layerControl = L.control({ position: 'topright' });
+        // Using 'new L.Control()' instead of directly calling 'L.control'
+        const layerControl = new L.Control({ position: 'topright' });
         layerControl.onAdd = () => controlDiv;
         layerControl.addTo(map);
 
@@ -154,11 +155,14 @@ const PropertyMap: React.FC<{
 
     return (
         <MapContainer
-            center={center}
-            zoom={zoom}
-            style={{ height: "500px", width: "100%" }}
-            whenCreated={map => mapRef.current = map}
-        >
+        center={center}
+        zoom={zoom}
+        style={{ height: "500px", width: "100%" }}
+        whenReady={() => {
+            mapRef.current = mapRef.current?.getPane('mapPane') as any; // Access the map reference here
+        }}
+    >
+    
             <TileLayer
                 url={isSatelliteView 
                     ? 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'

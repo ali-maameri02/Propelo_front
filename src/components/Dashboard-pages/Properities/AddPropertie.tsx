@@ -129,10 +129,10 @@ console.log("propid", id)
         localStorage.setItem('propertyLocation', JSON.stringify(data));
     };
 
-    const loadLocationData = () => {
-        const storedData = localStorage.getItem('propertyLocation');
-        return storedData ? JSON.parse(storedData) : null;
-    };
+    // const loadLocationData = () => {
+    //     const storedData = localStorage.getItem('propertyLocation');
+    //     return storedData ? JSON.parse(storedData) : null;
+    // };
     const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
       };

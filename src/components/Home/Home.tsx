@@ -66,19 +66,20 @@ export const Home: React.FC = () => {
           </div>
           <div className="card-appartments w-[100%] flex flex-col justify-around  overflow-y-scroll" style={{maxHeight:'80vh',  scrollbarWidth: "thin",
             scrollbarColor: "#2563EB transparent",
-            '&::-webkit-scrollbar': {
-              width: '12px',
-            },
-            '&::-webkit-scrollbar-track': {
-              background: 'blue',
-            },
-            '&::-webkit-scrollbar-thumb': {
-              background: '#888',
-              borderRadius: '6px',
-            },
-            '&::-webkit-scrollbar-thumb:hover': {
-              background: '#555',
-            },}}>
+            // '&::-webkit-scrollbar': {
+            //   width: '12px',
+            // },
+            // '&::-webkit-scrollbar-track': {
+            //   background: 'blue',
+            // },
+            // '&::-webkit-scrollbar-thumb': {
+            //   background: '#888',
+            //   borderRadius: '6px',
+            // },
+            // '&::-webkit-scrollbar-thumb:hover': {
+            //   background: '#555',
+            
+            }}>
 
           {/* List of apartments */}
           {apartments.map((apartment) => (
