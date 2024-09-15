@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
-// import {Icon} from 'leaflet';
-
 import 'leaflet/dist/leaflet.css';
-import markerIconUrl from '../../../assets/icons8-map-marker-ezgif.com-gif-maker.gif'; // Ensure this path is correct
+import markerIconUrl from '../../../assets/icons8-map-marker-ezgif.com-gif-maker.gif';
 import { OpenStreetMapProvider, GeoSearchControl } from 'leaflet-geosearch';
 import 'leaflet-geosearch/dist/geosearch.css';
 import satelliteThumbnail from '../../../assets/satellite-thumbnail.jpg'; 
@@ -21,8 +19,6 @@ const createCustomIcon = () => {
         popupAnchor: [0, -32],
     });
 };
-// L.marker([51.5, -0.09], {icon: createCustomIcon}).addTo(MapContainer);
-
 
 // Component to center the map on the marker
 const CenterMapOnMarker: React.FC<{ position: LatLngTuple }> = ({ position }) => {
@@ -124,7 +120,7 @@ const PropertyMap: React.FC<{
     // Handle map events like click
     const MapEventHandler = () => {
         useMapEvents({
-            click: (e: { latlng: { lat: number; lng: number; }; }) => {
+            click: (e) => {
                 const latlng: LatLngTuple = [e.latlng.lat, e.latlng.lng];
                 setMarker(latlng);
                 setPopupText(`Latitude: ${latlng[0]} Longitude: ${latlng[1]}`);
@@ -146,6 +142,8 @@ const PropertyMap: React.FC<{
     return (
         <MapContainer
             style={{ height: "500px", width: "100%" }}
+            center={center} // Set initial center
+            zoom={zoom} // Set initial zoom
             whenReady={() => {
                 // Set initial view after map is ready
                 const mapInstance = useMap().getMap();
@@ -163,7 +161,7 @@ const PropertyMap: React.FC<{
             <MapEventHandler />
             {!disableLayerControl && !hideLayerControl && <MapLayerControl toggleSatelliteView={toggleSatelliteView} isSatelliteView={isSatelliteView} />}
             {marker && (
-                <Marker position={marker} >
+                <Marker position={marker} icon={createCustomIcon()}>
                     <Popup>{popupText}</Popup>
                 </Marker>
             )}
