@@ -10,7 +10,7 @@
       "preview": "vite preview",
       "predeploy": "vite build",
       "deploy": "gh-pages -d dist",
-      "prebuild": "npm install leaflet @types/leaflet react-dom"
+      "prebuild": "npm install leaflet @types/leaflet react-dom -f"
     },
     "dependencies": {
       "@emotion/react": "^11.13.3",
