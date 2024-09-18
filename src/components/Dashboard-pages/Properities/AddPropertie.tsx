@@ -344,7 +344,7 @@ console.log("propid", id)
                               <input type="text" name="state" id="state" value={formData.state} onChange={handleChange} className="w-full border-2 rounded-lg border-gray-300 p-2 focus:outline-none focus:border-text-color1" />
                           </div>
                           <div className="group-input mt-2 flex flex-col md:flex-row justify-start items-center font-almarai ">
-                              <label className="mr-2 w-64">Terrain</label>
+                              <label className="mr-2 w-64">Parcking</label>
                               <div className="flex items-center">
                                   <label className="mr-4">
                                       <input

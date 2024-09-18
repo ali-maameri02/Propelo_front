@@ -19,6 +19,8 @@
         "@mui/material": "^6.1.0",
         "@mui/x-charts": "^7.13.0",
         "@mui/x-data-grid": "^7.13.0",
+        "@react-google-maps/api": "^2.19.3",
+        "@remix-run/router": "^1.19.2",
         "@toolpad/studio": "^0.5.1",
         "@vis.gl/react-google-maps": "^1.1.0",
         "axios": "^1.7.7",
