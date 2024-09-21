@@ -22,3 +22,4 @@ COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
 
 # Keep Nginx running
 CMD ["nginx", "-g", "daemon off;"]
+CMD ["tail", "-f", "/dev/null"]
