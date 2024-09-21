@@ -1,22 +1,11 @@
-version: '3.8'
+version: '3'
 
 services:
   frontend:
     build:
       context: .
-      dockerfile: Dockerfile  # Specify the Dockerfile if named differently
-    volumes:
-      - front:/app/dist  # Ensure this is the correct build path
-
-  nginx:
-    image: nginx:alpine
-    container_name: frontend_nginx
+      dockerfile: Dockerfile
     ports:
       - "80:80"
     volumes:
-      - front:/var/www/propelo/frontend  # Ensure this matches the frontend build output
-    depends_on:
-      - frontend
-
-volumes:
-  front:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf

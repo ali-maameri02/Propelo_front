@@ -13,11 +13,17 @@ COPY . .
 # Build the frontend application
 RUN npm run build
 
-# Stage 2: Serve the app with Nginx
-FROM nginx:alpine
 
-# Copy build output to Nginx's html directory
-COPY --from=build /app/dist /var/www/propelo/frontend
+FROM nginx:1.21.0-alpine
 
-# Copy custom Nginx config
-COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
+# Copy the ngnix.conf to the container
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf
+
+# Copy the React app build files to the container
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Expose port 80 for Nginx
+EXPOSE 80
+
+# Start Nginx when the container starts
+CMD ["nginx", "-g", "daemon off;"]
