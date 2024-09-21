@@ -11,4 +11,14 @@ RUN npm install --force
 COPY . .
 RUN npm run build
 
-# No CMD here, since we'll use nginx in the next stage
+# Stage 2: Serve the app
+FROM nginx:alpine
+
+# Copy the Vite build output to Nginx's html directory
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Copy the Nginx configuration file
+COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
+
+# Keep Nginx running
+CMD ["nginx", "-g", "daemon off;"]
