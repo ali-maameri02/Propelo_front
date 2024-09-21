@@ -1,18 +1,16 @@
 [build]
+  base = "propelo" # Adjust if your project is in a subdirectory
   command = "npm run build"
   publish = "dist"
   functions = "netlify/functions"
 
-# If you want to ignore certain files from triggering deploys
 [build.processing]
   skip_processing = true
 
-# Environment variables
 [context.production.environment]
   NODE_ENV = "production"
-  CI = "false" # Optional, to prevent warnings as errors
+  CI = "false"
 
-# Redirects (optional)
 [[redirects]]
   from = "/*"
   to = "/index.html"
