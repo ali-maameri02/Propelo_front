@@ -172,7 +172,7 @@ const AppartementDetails: React.FC = () => {
               <p>Rooms: F{apartment.type}</p>
               <p>Surface: {apartment.surface}m²</p>
               <p>Floor: {apartment.floor}</p>
-              <p>Description: {apartment.description}</p>
+              <p>Description: <br /> {apartment.description}</p>
             </DetailsContainer>
           </Slide>
 
@@ -202,7 +202,7 @@ const AppartementDetails: React.FC = () => {
           {/* Map */}
           <Slide direction="left">
             <DetailsContainer>
-            {propertyId && <PropertiesMarkerMap zoomedPropertyId={propertyId} />}
+            <PropertiesMarkerMap zoomedPropertyId={propertyId || undefined} />
             </DetailsContainer>
           </Slide>
 

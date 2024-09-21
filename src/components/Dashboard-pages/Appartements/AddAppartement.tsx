@@ -366,18 +366,19 @@ const handleSubmitImages = async () => {
         <div className="group-input flex flex-col md:flex-row items-center font-almarai">
           <label htmlFor="propertyId" className="mr-2 w-36">Propriété</label>
           <select
-            name="propertyId"
-            id="propertyId"
-            value={propertyId}
-            onChange={(e) => setPropertyId(e.target.value)}
-            className="w-full border-2 rounded-lg border-gray-300 p-2 focus:outline-none focus:border-text-color1"
-          >
-            {properties.map((property) => (
-              <option key={property.id} value={property.id}>
-                {property.name}
-              </option>
-            ))}
-          </select>
+                name="propertyId"
+                id="propertyId"
+                value={propertyId}
+                onChange={(e) => setPropertyId(e.target.value)}
+                className="w-full border-2 border-gray-300 rounded-lg p-2"
+              >
+                <option value="">Sélectionnez une propriété</option>
+                {properties.map((property) => (
+                  <option key={property.id} value={property.id}>
+                    {property.name}
+                  </option>
+                ))}
+              </select>
         </div>
         <div className="group-input flex flex-col md:flex-row items-center font-almarai">
           <label htmlFor="selectedF" className="mr-2 w-36">Type de pièce</label>

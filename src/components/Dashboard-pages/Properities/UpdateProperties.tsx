@@ -194,10 +194,15 @@ const UpdateProperties: React.FC = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-
+  
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+  
 
   if (!formData) {
     return <div>Loading...</div>;
@@ -253,7 +258,18 @@ const UpdateProperties: React.FC = () => {
           />
         </div>
                           <div className="group-input mt-2 flex flex-col md:flex-row items-center font-almarai">
-          <label htmlFor="state" className="mr-2 w-36">État</label>
+          <label htmlFor="floor" className="mr-2 w-36">Étages</label>
+          <input
+            type="number"
+            name="floor"
+            id="floor"
+            value={formData.floor}
+            onChange={handleChange}
+            className="w-full border-2 rounded-lg border-gray-300 p-2 focus:outline-none focus:border-text-color1"
+          />
+        </div>
+                          <div className="group-input mt-2 flex flex-col md:flex-row items-center font-almarai">
+          <label htmlFor="state" className="mr-2 w-36">Wilaya</label>
           <input
             type="text"
             name="state"
@@ -264,7 +280,7 @@ const UpdateProperties: React.FC = () => {
           />
         </div>
         <div className="group-input flex flex-col md:flex-row items-center font-almarai">
-          <label className="mr-2 w-36">Terrain</label>
+          <label className="mr-2 w-36">Parcking</label>
           <div className="flex items-center">
             <label className="mr-4">
               <input
@@ -304,27 +320,28 @@ const UpdateProperties: React.FC = () => {
           />
         </div>
         <div className="group-input mt-1 flex flex-col md:flex-row items-center font-almarai">
-          <label htmlFor="constructionDate" className="mr-2 w-36">Date de construction</label>
-          <input
-            type="date"
-            name="constructionDate"
-            id="constructionDate"
-            value={formData.constructionDate}
-            onChange={handleChange}
-            className="w-full border-2 rounded-lg border-gray-300 p-2 focus:outline-none focus:border-text-color1"
-          />
-        </div>
-        <div className="group-input mt-1 flex flex-col md:flex-row items-center font-almarai">
-          <label htmlFor="endConstructionDate" className="mr-2 w-36">Date de fin de construction</label>
-          <input
-            type="date"
-            name="endConstructionDate"
-            id="endConstructionDate"
-            value={formData.endConstructionDate}
-            onChange={handleChange}
-            className="w-full border-2 rounded-lg border-gray-300 p-2 focus:outline-none focus:border-text-color1"
-          />
-        </div>
+  <label htmlFor="constructionDate" className="mr-2 w-36">Date de construction</label>
+  <input
+    type="date"
+    name="constractionDate"
+    id="constractionDate"
+    value={formData.constractionDate}
+    onChange={handleDateChange} // Use the new date change function
+    className="w-full border-2 rounded-lg border-gray-300 p-2 focus:outline-none focus:border-text-color1"
+  />
+</div>
+<div className="group-input mt-1 flex flex-col md:flex-row items-center font-almarai">
+  <label htmlFor="endConstractionDate" className="mr-2 w-36">Date de fin de construction</label>
+  <input
+    type="date"
+    name="endConstractionDate"
+    id="endConstractionDate"
+    value={formData.endConstractionDate}
+    onChange={handleDateChange} // Use the new date change function
+    className="w-full border-2 rounded-lg border-gray-300 p-2 focus:outline-none focus:border-text-color1"
+  />
+</div>
+
         <div className="group-input mt-1 flex flex-col md:flex-row items-center font-almarai">
           <label htmlFor="description" className="mr-2 w-36">Description</label>
           <textarea

@@ -14,6 +14,7 @@ interface Property {
     name: string;
     address: string;
     city: string;
+    floor:number,
     state: string;
     apartmentsNumber: number;
 }
@@ -29,7 +30,7 @@ const Properities: React.FC = () => {
         { field: 'name', headerName: 'Nom', width: 150 },
         { field: 'address', headerName: 'Adresse', width: 200 },
         { field: 'city', headerName: 'Ville', width: 130 },
-        { field: 'state', headerName: 'Étages', width: 130 },
+        { field: 'floor', headerName: 'Étages', width: 130 },
         { field: 'apartmentsNumber', headerName: 'n° Appartements', width: 180 },
         {
             field: 'actions',

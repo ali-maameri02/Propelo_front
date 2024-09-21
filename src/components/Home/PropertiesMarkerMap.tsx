@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { GoogleMap, Marker, InfoWindow, useJsApiLoader } from '@react-google-maps/api';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import satelliteThumbnail from '../../assets/satellite-thumbnail.jpg';
 import standardThumbnail from '../../assets/standard-thumbnail.jpg';
 
@@ -15,7 +16,7 @@ interface Property {
 }
 
 interface PropertiesMarkerMapProps {
-  zoomedPropertyId?: string;
+  zoomedPropertyId?: string | null; // Updated to allow null
 }
 
 const mapContainerStyle = {
@@ -24,17 +25,19 @@ const mapContainerStyle = {
 };
 
 const defaultCenter = {
-  lat: 28.0339,  // Default center for Algeria
-  lng: 1.6596,
+  lat: 29.1328017,  // Default center for Algeria
+  lng: 0.9848549,
 };
 
 const PropertiesMarkerMap: React.FC<PropertiesMarkerMapProps> = ({ zoomedPropertyId }) => {
   const [properties, setProperties] = useState<Property[]>([]);
   const [isSatelliteView, setIsSatelliteView] = useState(false);
   const [center, setCenter] = useState(defaultCenter);
-  const [zoom, setZoom] = useState(6);
+  const [zoom, setZoom] = useState(5);
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
   const [pictures, setPictures] = useState<{ [key: number]: string[] }>({});
+
+  const navigate = useNavigate();
 
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: import.meta.env.VITE_APP_GOOGLE_MAPS_API_KEY || "",
@@ -67,9 +70,10 @@ const PropertiesMarkerMap: React.FC<PropertiesMarkerMapProps> = ({ zoomedPropert
           );
           if (zoomedProperty) {
             setCenter({ lat: zoomedProperty.latitude, lng: zoomedProperty.longitude });
-            setZoom(10);
+            setZoom(16); // Change this to a higher value for closer zoom
           }
         }
+        
       } catch (error) {
         console.error('Error fetching properties', error);
       }
@@ -77,6 +81,10 @@ const PropertiesMarkerMap: React.FC<PropertiesMarkerMapProps> = ({ zoomedPropert
 
     fetchProperties();
   }, [zoomedPropertyId]);
+
+  const handlePropertyClick = (property: Property) => {
+    navigate(`/apartments/${property.id}`);
+  };
 
   const toggleSatelliteView = () => {
     setIsSatelliteView((prevState) => !prevState);
@@ -94,16 +102,16 @@ const PropertiesMarkerMap: React.FC<PropertiesMarkerMapProps> = ({ zoomedPropert
         zoom={zoom}
         options={{
           mapTypeId: isSatelliteView ? 'satellite' : 'roadmap',
-          streetViewControl: true,   // Enables street view
-          mapTypeControl: true,      // Enables map type control
-          fullscreenControl: true,   // Enables fullscreen control
+          streetViewControl: true,
+          mapTypeControl: true,
+          fullscreenControl: true,
         }}
       >
         {properties.map((property) => (
           <Marker
             key={property.id}
             position={{ lat: property.latitude, lng: property.longitude }}
-            onClick={() => setSelectedProperty(property)}
+            onClick={() => setSelectedProperty(property)} // Set selected property on marker click
           />
         ))}
 
@@ -112,7 +120,10 @@ const PropertiesMarkerMap: React.FC<PropertiesMarkerMapProps> = ({ zoomedPropert
             position={{ lat: selectedProperty.latitude, lng: selectedProperty.longitude }}
             onCloseClick={() => setSelectedProperty(null)}
           >
-            <div className="w-[20rem] p-4 bg-white rounded-lg shadow-md">
+            <div 
+              className="w-[20rem] p-4 bg-white rounded-lg shadow-md cursor-pointer"
+              onClick={() => handlePropertyClick(selectedProperty)} // Navigate on info window click
+            >
               <div className="mb-4">
                 {pictures[selectedProperty.id]?.length > 0 ? (
                   <img

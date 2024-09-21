@@ -7,6 +7,7 @@ import AdminLogin from "./components/Login";
 import Home from "./components/Home/Home";
 import Appartementdetails from "./components/Home/Appartementdetails";
 import DashboardRoutes from "./components/Dashboard-components/DashboardRoutes";
+import ApartmentsByProperty from "./components/Home/ApartmentsByProperty";
 
 function App() {
   const directory = useLocation();
@@ -25,6 +26,8 @@ function App() {
         <Route path="/Admin" element={<AdminLogin />} />
         <Route path="/" element={<Home />} />
         <Route path="/Apprtementdetail/:apartmentId" element={<Appartementdetails />} />
+        <Route path="/apartments/:propertyId" element={<ApartmentsByProperty />} />
+
         
         {/* Conditional rendering of the dashboard route */}
         <Route 

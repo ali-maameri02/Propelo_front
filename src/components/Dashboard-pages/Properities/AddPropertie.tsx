@@ -27,6 +27,7 @@ const AddPropertie: React.FC = () => {
         address: '',
         city: '',
         state: '',
+        floor: 0,
         constractionDate: '2020-02-02',
         endConstractionDate: '2020-05-05',
         apartmentsNumber: 0,
@@ -99,6 +100,7 @@ console.log("propid", id)
             address: '',
             city: '',
             state: '',
+            floor:0,
             constractionDate: '2020-02-02',
             endConstractionDate: '2020-05-05',
             apartmentsNumber: 0,
@@ -251,6 +253,7 @@ console.log("propid", id)
             address: formData.address || "",
             city: formData.city || "",
             state: formData.state || "",
+            floor : formData.floor || 0,
             latitude: locationData.latitude || 0,
             longitude: locationData.longitude || 0,
             constractionDate: formData.constractionDate || "",
@@ -340,8 +343,8 @@ console.log("propid", id)
                               <input type="text" name="address" id="address" value={formData.address} onChange={handleChange} className="w-full border-2 rounded-lg border-gray-300 p-2 focus:outline-none focus:border-text-color1" />
                           </div>
                           <div className="group-input mt-2 flex flex-col md:flex-row items-center font-almarai">
-                              <label htmlFor="state" className="mr-2 w-full">Nombres Des Étages</label>
-                              <input type="text" name="state" id="state" value={formData.state} onChange={handleChange} className="w-full border-2 rounded-lg border-gray-300 p-2 focus:outline-none focus:border-text-color1" />
+                              <label htmlFor="floor" className="mr-2 w-full">Nombres Des Étages</label>
+                              <input type="number" name="floor" id="floor" value={formData.floor} onChange={handleChange} className="w-full border-2 rounded-lg border-gray-300 p-2 focus:outline-none focus:border-text-color1" />
                           </div>
                           <div className="group-input mt-2 flex flex-col md:flex-row justify-start items-center font-almarai ">
                               <label className="mr-2 w-64">Parcking</label>
@@ -405,7 +408,7 @@ console.log("propid", id)
  onLocationSave={saveLocationData} 
  locationData={locationData} 
 //  disableSearch={true} 
- disableLayerControl={false} 
+//  disableLayerControl={false} 
 //  hideLayerControl={true} 
 />           )}
                 {activeStep === 3 && (
@@ -414,9 +417,9 @@ console.log("propid", id)
                         <PropertyMap 
   onLocationSave={saveLocationData} 
   locationData={locationData} 
-  disableSearch={true} 
-  disableLayerControl={false} 
-  hideLayerControl={true} 
+//   disableSearch={true} 
+//   disableLayerControl={false} 
+//   hideLayerControl={true} 
 /> 
                     </div>
                 )}
