@@ -15,7 +15,7 @@ RUN npm run build  # Build the application
 FROM nginx:alpine
 
 # Copy built files from the build stage to Nginx's html directory
-COPY --from=build /app/dist /usr/share/nginx/html  # Adjust based on your build output location
+COPY --from=build /app/dist /usr/share/nginx/html  # Adjust if your output directory is different
 
 # Copy custom Nginx configuration if needed
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
