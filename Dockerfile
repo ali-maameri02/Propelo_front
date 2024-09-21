@@ -5,7 +5,7 @@ WORKDIR /app
 
 # Copy package.json and yarn.lock, then install dependencies
 COPY package.json yarn.lock ./
-RUN npm install
+RUN npm install -f
 
 # Copy the rest of the source code and build the app
 COPY . .
