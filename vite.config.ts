@@ -6,14 +6,14 @@ export default defineConfig({
     // base: '/Propelo_front.git/',
 
   plugins: [react()],
-  server: {
-        proxy: {
-            '/api': {
-                target: 'http://propelo.runasp.net',
-                changeOrigin: true,
-                secure: false,
-            }
-        }
-    }
+//   server: {
+//         proxy: {
+//             '/api': {
+//                 target: 'http://propelo.runasp.net',
+//                 changeOrigin: true,
+//                 secure: false,
+//             }
+//         }
+//     }
 
 })
