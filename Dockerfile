@@ -10,3 +10,4 @@ RUN npm install --force
 # Copy the rest of the source code and build the app
 COPY . .
 RUN npm run build
+CMD ["npm", "run" , "dev"]
