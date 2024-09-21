@@ -32,7 +32,7 @@ const Navbar: React.FC = () => {
                         <span className="ml-2 text-xl font-semibold">Propelo</span>
                     </div>
                 </div>
-                <span className="text-gray-500">{unsoldApartmentsCount} Apartments for sale</span>
+                <span className="text-gray-500">{unsoldApartmentsCount} Appartements A vendre </span>
             </nav>
         </Slide>
     );

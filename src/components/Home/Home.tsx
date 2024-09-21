@@ -106,14 +106,14 @@ export const Home: React.FC = () => {
           {/* Filters */}
           <div className="flex flex-col space-y-4 mb-4">
   <FormControl variant="outlined" size="small" fullWidth>
-    <InputLabel id="type-label">Type de Chambre</InputLabel>
+    <InputLabel id="floor-label">Étages</InputLabel>
     <Select
-      labelId="type-label"
-      name="type"
-      value={filter.type}
+      labelId="floor-label"
+      name="floor"
+      value={filter.floor}
       onChange={handleFilterChange}
     >
-              <MenuItem value="">Toutes les Etages</MenuItem>
+              <MenuItem value="">Tous les Étages</MenuItem>
       {etageOptions.map((floor, index) => (
         <MenuItem key={index} value={floor}>{floor}</MenuItem>
       ))}
@@ -121,7 +121,7 @@ export const Home: React.FC = () => {
   </FormControl>
 
   <FormControl variant="outlined" size="small" fullWidth>
-    <InputLabel id="type-label">Etages</InputLabel>
+    <InputLabel id="type-label">Nombre de Chambres</InputLabel>
     <Select
       labelId="type-label"
       name="type"
@@ -138,7 +138,7 @@ export const Home: React.FC = () => {
   </FormControl>
 
   <div className="mb-4">
-    <span className="block text-gray-700 mb-2">Surface Area</span>
+    <span className="block text-gray-700 mb-2">Superficie</span>
     <Slider
       value={[filter.minSurface, filter.maxSurface]}
       onChange={handleSliderChange}
@@ -149,25 +149,25 @@ export const Home: React.FC = () => {
       aria-labelledby="surface-slider"
     />
     <div className="flex justify-between text-gray-600 text-sm">
-      <span>Min: {filter.minSurface} sqm</span>
-      <span>Max: {filter.maxSurface} sqm</span>
+      <span>Min: {filter.minSurface} m²</span>
+      <span>Max: {filter.maxSurface} m²</span>
     </div>
   </div>
 
   <Button
     variant="contained"
     onClick={() => setFilter({
-      floor:"",
-      type:"",
+      floor: "",
+      type: "",
       minSurface: 0,
       maxSurface: 500,
     })}
   >
-    Reset Filters
+    Réinitialiser les filtres
   </Button>
 </div>
 
-          <div className="card-appartments w-[100%] flex flex-col justify-around overflow-y-scroll" style={{ maxHeight: '80vh',scrollbarWidth: "thin",
+          <div className="card-appartments w-[100%] flex flex-col justify-around overflow-y-scroll" style={{ maxHeight: '80vh', scrollbarWidth: "thin",
             scrollbarColor: "#2563EB transparent", }}>
             {/* List of apartments */}
             {filteredApartments.map((apartment) => (
@@ -179,7 +179,7 @@ export const Home: React.FC = () => {
                       <div className="mb-2">
                         <img
                           src={pictures[apartment.id][0]}
-                          alt={`Picture of ${apartment.name}`}
+                          alt={`Image de ${apartment.name}`}
                           className="w-full h-32 object-cover rounded-md"
                         />
                       </div>
@@ -187,7 +187,7 @@ export const Home: React.FC = () => {
                       <div className="mb-2">
                         <img
                           src="/path/to/default-image.jpg"
-                          alt="No picture available"
+                          alt="Pas d'image disponible"
                           className="w-full h-32 object-cover rounded-md"
                         />
                       </div>
@@ -195,8 +195,8 @@ export const Home: React.FC = () => {
                     <div className="details flex flex-col ">
                       <span className="font-semibold">{apartment.name}</span>
                       <span className="text-sm text-gray-500">{`Type: ${apartment.type}`}</span>
-                      <span className="text-sm text-gray-500">{`Floor: ${apartment.floor}`}</span>
-                      <span className="text-sm text-gray-500">{`Surface: ${apartment.surface} sqm`}</span>
+                      <span className="text-sm text-gray-500">{`Étage: ${apartment.floor}`}</span>
+                      <span className="text-sm text-gray-500">{`Superficie: ${apartment.surface} m²`}</span>
                     </div>
                   </div>
                 </div>
@@ -207,7 +207,7 @@ export const Home: React.FC = () => {
 
         {/* Map Container */}
         <Slide direction="right" className="flex-1 p-4 ">
-          <PropertiesMarkerMap  />
+          <PropertiesMarkerMap />
         </Slide>
       </div>
 
