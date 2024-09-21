@@ -5,7 +5,7 @@ services:
     build:
       context: .
     volumes:
-      - front:/app/build/  # This path should be where the build artifacts are stored
+      - front:/app/dist/  # This path should be where the build artifacts are stored
 
   nginx:
     image: nginx:alpine
