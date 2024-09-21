@@ -3,21 +3,22 @@ version: '3.8'
 services:
   frontend:
     build:
-      context: . 
-      dockerfile: Dockerfile  # Specify the Dockerfile if it's named differently
+      context: .
+      dockerfile: Dockerfile
     container_name: frontend_app
     volumes:
-      - front:/app/build/
+      - front:/app/build
 
   nginx:
     image: nginx:alpine
     container_name: frontend_nginx
     ports:
-      - "80:80"  # Map port 80 on the host to port 80 in the Nginx container
+      - "80:80"
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
-      - front:/var/www/propelo/frontend
+      - front:/usr/share/nginx/html  # This should point to the location where Nginx looks for the files
     depends_on:
       - frontend  # Ensure Nginx starts after the frontend build completes
+
 volumes:
- front:
+  front:
