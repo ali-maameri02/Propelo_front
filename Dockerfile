@@ -4,21 +4,20 @@ FROM node:lts-alpine as build
 WORKDIR /app
 
 # Copy package.json and yarn.lock, then install dependencies
-COPY ./package.json  package-lock.json ./ ./yarn.lock ./
-RUN npm install --force
+COPY package.json yarn.lock ./
+RUN npm install
 
 # Copy the rest of the source code and build the app
 COPY . .
 
-
 # Build the frontend application
 RUN npm run build
 
-# Install serve globally
-RUN npm install -g serve
+# Stage 2: Serve the app with Nginx
+FROM nginx:alpine
 
-# Expose port 80 for the application
-EXPOSE 80
+# Copy build output to Nginx's html directory
+COPY --from=build /app/dist /var/www/propelo/frontend
 
-# Command to serve the build output
-CMD ["serve", "-s", "build", "-l", "80"]
+# Copy custom Nginx config
+COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
