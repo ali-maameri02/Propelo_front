@@ -11,14 +11,3 @@ RUN npm install -f
 COPY . .
 RUN npm run build
 
-# Stage 2: Use nginx to serve the built files
-FROM nginx:alpine
-
-# Copy the built files from the "build" stage (not "dist")
-COPY --from=build /app/dist /usr/share/nginx/html
-
-# Expose the port that nginx will serve on
-EXPOSE 80
-
-# Start nginx
-CMD ["nginx", "-g", "daemon off;"]
