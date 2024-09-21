@@ -6,7 +6,7 @@ services:
       context: .
     volumes:
       - front:/app/build/  # Adjust if needed
-    command: ["npm", "run" ,"dev"]  # Ensure it starts your build process
+    # command: ["npm", "run" ,"dev"]  # Ensure it starts your build process
 
   nginx:
     image: nginx:alpine
