@@ -3,12 +3,11 @@ version: '3.8'
 services:
   frontend:
     build:
-      context: ./ 
+      context: . 
+      dockerfile: Dockerfile  # Specify the Dockerfile if it's named differently
     container_name: frontend_app
-    ports:
-      - "5173:5173"  # Expose Vite dev server on port 5173
-    expose:
-      - "5173"  # Expose Vite server internally for Nginx to access
+    volumes:
+      - front:/app/build/
 
   nginx:
     image: nginx:alpine
@@ -17,5 +16,8 @@ services:
       - "80:80"  # Map port 80 on the host to port 80 in the Nginx container
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - front:/var/www/propelo/frontend
     depends_on:
-      - frontend  # Ensure Nginx starts after frontend
+      - frontend  # Ensure Nginx starts after the frontend build completes
+volumes:
+ front:
