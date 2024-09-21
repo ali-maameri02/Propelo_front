@@ -5,7 +5,8 @@ services:
     build:
       context: .
     volumes:
-      - front:/app/build/
+      - front:/app/build/  # Adjust if needed
+    command: ["npm", "run" ,"dev"]  # Ensure it starts your build process
 
   nginx:
     image: nginx:alpine
@@ -13,11 +14,10 @@ services:
     ports:
       - "80:80"
     volumes:
-      - front:/var/www/propelo/frontend
+      - front:/var/www/propelo/frontend  # This should point to the build output
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
       - frontend
-
 
 volumes:
   front:
