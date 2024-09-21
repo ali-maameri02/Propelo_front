@@ -3,7 +3,7 @@ version: '3.8'
 services:
   frontend:
     build:
-      context: ./
+      context: ./ 
     container_name: frontend_app
     ports:
       - "5173:5173"  # Expose Vite dev server on port 5173
