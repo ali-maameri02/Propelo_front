@@ -27,8 +27,15 @@ const Appartement: React.FC = () => {
 
     const columns: GridColDef[] = [
         { field: 'name', headerName: 'Nom', width: 150 },
-        { field: 'type', headerName: 'Type', width: 150 },
-        { field: 'floor', headerName: 'Étage', width: 130 },
+        {
+            field: 'type',
+            headerName: 'Type',
+            width: 150,
+            renderCell: (params) => (
+                <span>{`F ${params.row.type} `}</span> // Customize the display format
+            ),
+        },
+                { field: 'floor', headerName: 'Étage', width: 130 },
         { field: 'surface', headerName: 'Surface (m²)', width: 150 },
         {
             field: 'sold',

@@ -194,7 +194,7 @@ export const Home: React.FC = () => {
                     )}
                     <div className="details flex flex-col ">
                       <span className="font-semibold">{apartment.name}</span>
-                      <span className="text-sm text-gray-500">{`Type: ${apartment.type}`}</span>
+                      <span className="text-sm text-gray-500">{`Type: F${apartment.type}`}</span>
                       <span className="text-sm text-gray-500">{`Étage: ${apartment.floor}`}</span>
                       <span className="text-sm text-gray-500">{`Superficie: ${apartment.surface} m²`}</span>
                     </div>

@@ -127,22 +127,22 @@ const AppartementDetails: React.FC = () => {
     try {
       const response = await axios.post(`${API_BASE_URL}/Order`, contactForm);
       console.log('Order submitted:', response.data);
-      alert('Your message has been sent successfully!');
+      alert('Votre message a été envoyé avec succès !');
     } catch (error) {
       console.error('Error submitting order:', error);
-      alert('An error occurred. Please try again.');
+      alert('Une erreur s\'est produite. Veuillez réessayer.');
     }
   };
 
   if (!apartment) {
-    return <div>Loading...</div>;
+    return <div>Chargement...</div>;
   }
 
   return (
     <>
       <Navbar />
       <div className="Pictures mt-1 w-full p-3">
-        <h1 className="font-almarai text-black text-[2rem]">Pictures</h1>
+        <h1 className="font-almarai text-black text-[2rem]">Images</h1>
         <Getpictures images={pictures.map((url) => ({ url }))} />
       </div>
       <div className="contentdetails relative flex flex-col lg:flex-row-reverse lg:justify-between p-2">
@@ -153,7 +153,7 @@ const AppartementDetails: React.FC = () => {
                 <Avatar alt={promoter?.firstName || 'Admin'} src={promoterPicture} />
                 <div className="ml-4">
                   <h3>@{promoter ? `${promoter.firstName} ${promoter.lastName}` : 'Admin'}</h3>
-                  <p className="text-gray-600">Details</p>
+                  <p className="text-gray-600">Détails</p>
                   <p className="text-gray-500 text-sm">{promoter?.address || 'Adresse non encore fournie'}</p>
                 </div>
               </div>
@@ -168,10 +168,10 @@ const AppartementDetails: React.FC = () => {
           {/* General Information */}
           <Slide direction="left">
             <DetailsContainer>
-              <h2 className="text-xl font-semibold mb-2">General</h2>
-              <p>Rooms: F{apartment.type}</p>
-              <p>Surface: {apartment.surface}m²</p>
-              <p>Floor: {apartment.floor}</p>
+              <h2 className="text-xl font-semibold mb-2">Général</h2>
+              <p>Chambres: F{apartment.type}</p>
+              <p>Surface: {apartment.surface} m²</p>
+              <p>Étage: {apartment.floor}</p>
               <p>Description: <br /> {apartment.description}</p>
             </DetailsContainer>
           </Slide>
@@ -179,9 +179,9 @@ const AppartementDetails: React.FC = () => {
           {/* Rooms */}
           <Slide direction="left">
             <DetailsContainer>
-              <h2 className="text-xl font-semibold mb-2">Rooms</h2>
+              <h2 className="text-xl font-semibold mb-2">Chambres</h2>
               {rooms.map((room, index) => (
-                <p key={index}>{room.name} Room: {room.surface}m²</p>
+                <p key={index}>{room.name} Chambre: {room.surface} m²</p>
               ))}
             </DetailsContainer>
           </Slide>
@@ -193,7 +193,7 @@ const AppartementDetails: React.FC = () => {
               {documents.map((document, index) => (
                 <div key={index}>
                   <p>{document.documentName}</p>
-                  <Button onClick={() => handleDownload(document.documentPath)}>Download</Button>
+                  <Button onClick={() => handleDownload(document.documentPath)}>Télécharger</Button>
                 </div>
               ))}
             </DetailsContainer>
@@ -202,7 +202,7 @@ const AppartementDetails: React.FC = () => {
           {/* Map */}
           <Slide direction="left">
             <DetailsContainer>
-            <PropertiesMarkerMap zoomedPropertyId={propertyId || undefined} />
+              <PropertiesMarkerMap zoomedPropertyId={propertyId || undefined} />
             </DetailsContainer>
           </Slide>
 
@@ -212,7 +212,7 @@ const AppartementDetails: React.FC = () => {
               <h2 className="text-xl font-semibold mb-2">Contact</h2>
               <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
                 <TextField
-                  label="Name"
+                  label="Nom"
                   name="name"
                   // value={contactForm.name}
                   onChange={handleInputChange}
@@ -220,7 +220,7 @@ const AppartementDetails: React.FC = () => {
                   fullWidth
                 />
                 <TextField
-                  label="Phone"
+                  label="Téléphone"
                   name="phone"
                   value={contactForm.phone}
                   onChange={handleInputChange}
@@ -228,7 +228,7 @@ const AppartementDetails: React.FC = () => {
                   fullWidth
                 />
                 <TextField
-                  label="Email"
+                  label="E-mail"
                   name="email"
                   value={contactForm.email}
                   onChange={handleInputChange}
@@ -238,15 +238,14 @@ const AppartementDetails: React.FC = () => {
                 <TextField
                   label="Message"
                   name="message"
-                  value={contactForm.message}
+                  multiline
+                  rows={4}
                   onChange={handleInputChange}
                   variant="outlined"
                   fullWidth
-                  multiline
-                  rows={4}
                 />
-                <Button variant="contained" color="primary" type="submit" className="self-end">
-                  Send
+                <Button type="submit" variant="contained" className="bg-color1">
+                  Envoyer
                 </Button>
               </form>
             </DetailsContainer>

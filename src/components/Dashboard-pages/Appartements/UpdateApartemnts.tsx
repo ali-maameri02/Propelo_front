@@ -39,6 +39,16 @@ const getNumericType = (type: PieceType): number => {
   };
   return typeMap[type] || 0;
 };
+const apartmentTypes = [
+  { label: 'F1', value: 1 },
+  { label: 'F2', value: 2 },
+  { label: 'F3', value: 3 },
+  { label: 'F4', value: 4 },
+  { label: 'F5', value: 5 },
+  { label: 'F6', value: 6 },
+  { label: 'F7', value: 7 },
+  { label: 'Garage', value: 0 },
+];
 
 const UpdateApartment: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -60,7 +70,15 @@ const UpdateApartment: React.FC = () => {
  // States for images and documents
   const [images, setImages] = useState<ImageType[]>([]);
   const [documents, setDocuments] = useState<DocumentType[]>([]);
-  
+  const [selectedType, setSelectedType] = useState<{ value: number; label: string } | null>(null);
+
+  const handleTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedValue = parseInt(event.target.value, 10); // Convert string to number
+    const selectedOption = apartmentTypes.find(option => option.value === selectedValue) || null; // Find the selected option
+    setSelectedType(selectedOption);
+    console.log('Selected Type:', selectedOption); // Log selected type
+};
+
   const isStepSkipped = (step: number) => skipped.has(step);
 
   useEffect(() => {
@@ -77,6 +95,10 @@ const UpdateApartment: React.FC = () => {
         try {
           const apartmentResponse = await axios.get(`${API_BASE_URL}/Apartment/${id}`);
           setApartmentData(apartmentResponse.data);
+          const defaultTypeValue = apartmentResponse.data.type; // assuming `type` is the field from backend
+          const defaultType = apartmentTypes.find(option => option.value === defaultTypeValue) || null;
+          setSelectedType(defaultType);
+
 
           const areasResponse = await axios.get(`${API_BASE_URL}/Apartment/areas/${id}`);
           setAreas(areasResponse.data);
@@ -123,7 +145,11 @@ const UpdateApartment: React.FC = () => {
   
     const payload = {
       ...apartmentData,
+      type: selectedType ? selectedType.value : undefined, // Only include if valid
+
     };
+    console.log('Payload being sent:', payload);
+
   
     try {
       // Update apartment data
@@ -455,10 +481,34 @@ const handleDocumentsChange = (newDocuments: DocumentType[]) => {
 
 
               <div className="group-inputs-right flex flex-col w-full md:w-1/2 ml-5">
-              <div className="flex flex-row justify-between w-52 ol md:flex-row items-center mb-4">
-                <span>Type d'Appartement :</span>
-                  <span className='font-bold' >F {apartmentData.type}</span>
-                </div>
+              <div className="group-input flex flex-col md:flex-row items-center font-almarai">
+          <label htmlFor="description" className="mr-2 w-36">Description</label>
+          <textarea
+            name="description"
+            id="description"
+            value={apartmentData.description}
+            onChange={handleTextareaChange}
+            className="w-full border-2 rounded-lg border-gray-300 p-2 focus:outline-none focus:border-text-color1"
+            rows={4}
+          />
+        </div>
+        <div>
+        {/* Correctly render the selected type's label */}
+        {selectedType ? (
+            <div>Selected Type: {selectedType.label}</div>
+        ) : (
+            <div>No type selected</div>
+        )}
+        
+        {/* Example for rendering apartment types */}
+        <select onChange={handleTypeChange} value={apartmentData.type}>
+            {apartmentTypes.map(option => (
+                <option key={option.value} value={option.value}>
+                    {option.label}
+                </option>
+            ))}
+        </select>
+    </div>
            {/* Existing areas */}
            {areas.length > 0 && (
   <div>
