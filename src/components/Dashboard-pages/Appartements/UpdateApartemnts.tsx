@@ -132,7 +132,7 @@ const location = useLocation();
         console.error('Failed to update apartment data:', error);
         setError('Failed to update apartment data.');
       }
-      setActiveStep((prev) => prev + 1); // Always proceed to the next step
+      // setActiveStep((prev) => prev + 1); // Always proceed to the next step
     } 
     else if (activeStep === 1) {
       try {
@@ -551,13 +551,13 @@ const handleDocumentsChange = (newDocuments: DocumentType[]) => {
           onChange={(e) => handleAreaChange(area.id, e)}
           className="mr-2"
         />
-        <Button
+        {/* <Button
           variant="outlined"
           color="error"
           onClick={() => handleRemovePiece(area.id)}
         >
           Supprimer
-        </Button>
+        </Button> */}
       </div>
     ))}
   </div>
