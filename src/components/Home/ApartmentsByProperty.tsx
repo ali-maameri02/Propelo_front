@@ -176,9 +176,9 @@ const ApartmentsByProperty: React.FC = () => {
                       />
                     </div>
                   )}
-                  <div className="details flex flex-col">
+                  <div className="details ml-5 flex flex-col">
                     <Typography variant="h6" component="span" className="font-semibold">{apartment.name}</Typography>
-                    <Typography variant="body2" component="span">{apartment.type} | Floor: {apartment.floor} | Surface: {apartment.surface} sqm</Typography>
+                    <Typography variant="body2" component="span"> <strong> F</strong>{apartment.type} | Floor: {apartment.floor} | Surface: {apartment.surface} sqm</Typography>
                   </div>
                 </div>
               </div>
