@@ -149,8 +149,8 @@ const PropertiesMarkerMap: React.FC<PropertiesMarkerMapProps> = ({ zoomedPropert
                 <strong className="text-gray-700">{selectedProperty.city}</strong>
               </div>
               <div className="mb-2">
-                <span className="block text-gray-500 font-semibold">Terrain:</span>
-                <strong className="text-gray-700">{selectedProperty.terrain ? 'Yes' : 'No'}</strong>
+                <span className="block text-gray-500 font-semibold">Parcking:</span>
+                <strong className="text-gray-700">{selectedProperty.terrain ? 'Oui' : 'Non'}</strong>
               </div>
             </div>
           </InfoWindow>

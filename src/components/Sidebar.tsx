@@ -93,7 +93,7 @@ const Sidebar: React.FC = () => {
         <ListItemIcon className="mr-2 ml-2 text-gray-700 group-hover:text-color1 group-hover:fill-color1 group-hover:transition-all group-hover:ease-in-out">
           <HomeWorkOutlinedIcon />
         </ListItemIcon>
-        <ListItemText primary="Propriétés" />
+        <ListItemText primary="Bâtiments" />
       </ListItem>
 
       <ListItem

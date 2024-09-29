@@ -2,10 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
   Button,
-  Select,
-  MenuItem,
-  InputLabel,
-  FormControl,
   Typography,
   Modal,
 } from "@mui/material";
@@ -46,13 +42,6 @@ const ApartmentsByProperty: React.FC = () => {
   const [apartments, setApartments] = useState<Apartment[]>([]);
   const [property, setProperty] = useState<Property | null>(null);
   const [pictures, setPictures] = useState<{ [key: number]: string[] }>({});
-  const [filteredApartments, setFilteredApartments] = useState<Apartment[]>([]);
-  const [searchFloor, setSearchFloor] = useState<number | ''>('');
-  const [searchSurface, setSearchSurface] = useState<number | ''>('');
-  const [searchType, setSearchType] = useState<string | ''>('');
-  const [floorOptions, setFloorOptions] = useState<number[]>([]);
-  const [surfaceOptions, setSurfaceOptions] = useState<number[]>([]);
-  const [typeOptions, setTypeOptions] = useState<string[]>([]);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [currentGalleryImages, setCurrentGalleryImages] = useState<string[]>([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -88,16 +77,6 @@ const ApartmentsByProperty: React.FC = () => {
         // Filter apartments by propertyId
         const filtered = allApartments.filter((apartment) => apartment.propertyId === parseInt(propertyId));
         setApartments(filtered);
-        setFilteredApartments(filtered);
-
-        // Extract options for filters
-        const floors = Array.from(new Set(filtered.map((apartment) => apartment.floor))).sort((a, b) => a - b);
-        const surfaces = Array.from(new Set(filtered.map((apartment) => apartment.surface))).sort((a, b) => a - b);
-        const types = Array.from(new Set(filtered.map((apartment) => apartment.type)));
-
-        setFloorOptions(floors);
-        setSurfaceOptions(surfaces);
-        setTypeOptions(types);
 
         // Fetch pictures for each apartment
         const picturePromises = filtered.map(async (apartment) => {
@@ -121,29 +100,6 @@ const ApartmentsByProperty: React.FC = () => {
 
     fetchApartments();
   }, [propertyId]);
-
-  useEffect(() => {
-    // Filter apartments based on search criteria
-    const applyFilters = () => {
-      let results = apartments;
-
-      if (searchFloor !== '') {
-        results = results.filter(apartment => apartment.floor === searchFloor);
-      }
-
-      if (searchSurface !== '') {
-        results = results.filter(apartment => apartment.surface === searchSurface);
-      }
-
-      if (searchType !== '') {
-        results = results.filter(apartment => apartment.type === searchType);
-      }
-
-      setFilteredApartments(results);
-    };
-
-    applyFilters();
-  }, [searchFloor, searchSurface, searchType, apartments]);
 
   const handleCardClick = (apartmentId: number, propertyId: number) => {
     navigate(`/Apprtementdetail/${apartmentId}?propertyId=${propertyId}`);
@@ -195,61 +151,14 @@ const ApartmentsByProperty: React.FC = () => {
         </div>
       )}
       
-      <div className="flex flex-col space-y-4 mb-4">
-        {/* Search Filters */}
-        <div className="flex space-x-4 mb-4">
-          <FormControl variant="outlined" fullWidth>
-            <InputLabel>Floor</InputLabel>
-            <Select
-              value={searchFloor}
-              onChange={(e) => setSearchFloor(e.target.value as number | '')}
-              label="Floor"
-            >
-              <MenuItem value="">All Floors</MenuItem>
-              {floorOptions.map(floor => (
-                <MenuItem key={floor} value={floor}>{floor}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          <FormControl variant="outlined" fullWidth>
-            <InputLabel>Surface</InputLabel>
-            <Select
-              value={searchSurface}
-              onChange={(e) => setSearchSurface(e.target.value as number | '')}
-              label="Surface"
-            >
-              <MenuItem value="">All Surfaces</MenuItem>
-              {surfaceOptions.map(surface => (
-                <MenuItem key={surface} value={surface}>{surface} sqm</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          <FormControl variant="outlined" fullWidth>
-            <InputLabel>Type</InputLabel>
-            <Select
-              value={searchType}
-              onChange={(e) => setSearchType(e.target.value as string | '')}
-              label="Type"
-            >
-              <MenuItem value="">All Types</MenuItem>
-              {typeOptions.map(type => (
-                <MenuItem key={type} value={type}>{type}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </div>
-      </div>
-      
       <div className="card-apartments flex flex-col space-y-4 overflow-y-scroll" style={{ maxHeight: '80vh', scrollbarWidth: "thin", scrollbarColor: "#2563EB transparent" }}>
-        {filteredApartments.length === 0 ? (
+        {apartments.length === 0 ? (
           <Typography>No apartments found for this property.</Typography>
         ) : (
-          filteredApartments.map((apartment) => (
+          apartments.map((apartment) => (
             <Slide direction="left" key={apartment.id} className="p-4 bg-white shadow rounded-md cursor-pointer mb-4">
               <div onClick={() => handleCardClick(apartment.id, apartment.propertyId)}>
-              <div className="flex flex-row items-center justify-around w-96">
+                <div className="flex flex-row items-center justify-around w-96">
                   {pictures[apartment.id]?.length > 0 ? (
                     <div className="mb-2">
                       <img

@@ -107,7 +107,7 @@ const Properities: React.FC = () => {
             {!isAddPropertieRoute && !isUpdatePropertieRoute ? (
                 <>
                     <div className="head w-full flex flex-row justify-between items-center mr-0 py-3 pt-0">
-                        <h1 className="font-almarai font-bold text-textcolor">Propriétés</h1>
+                        <h1 className="font-almarai font-bold text-textcolor">Bâtiments</h1>
                         <div className="flex flex-row justify-end  w-full">
                             {selectedRows.length > 0 && (
                                 <Button variant="contained" sx={{mr:'5rem'}} color="error" onClick={handleDeleteSelectedRows}>

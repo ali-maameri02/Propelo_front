@@ -10,6 +10,7 @@ import Setpictures, { ImageType } from '../Properities/Setpictures';
 import Documents, { DocumentType } from './Documents';
 import { fetchLastApartmentId, fetchProperties } from '../utils/apiUtils';
 import axios, { AxiosError } from 'axios';
+import { useNavigate, useLocation } from 'react-router-dom';
 // import { Grid } from '@mui/material';
 
 const steps = [
@@ -67,7 +68,8 @@ const AddAppartement: React.FC = () => {
   const [success, setSuccess] = useState<string | null>(null);
 
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
+  const navigate = useNavigate();
+    const location = useLocation();
   useEffect(() => {
     const loadProperties = async () => {
       const fetchedProperties = await fetchProperties();
@@ -127,7 +129,7 @@ const AddAppartement: React.FC = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
 
     }
-
+  
     if (activeStep === 2) {
       if (apartmentId === null) {
         console.error("Apartment ID is not available.");
@@ -141,8 +143,10 @@ const AddAppartement: React.FC = () => {
         setError('Failed to submit pieces.');
       }
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      navigate(`/dashboard/apartments`); // Redirect to apartments route
 
     }
+    
 
   };
 
@@ -364,7 +368,7 @@ const handleSubmitImages = async () => {
           />
         </div>
         <div className="group-input flex flex-col md:flex-row items-center font-almarai">
-          <label htmlFor="propertyId" className="mr-2 w-36">Propriété</label>
+          <label htmlFor="propertyId" className="mr-2 w-36">Bâtiment</label>
           <select
                 name="propertyId"
                 id="propertyId"
@@ -372,7 +376,7 @@ const handleSubmitImages = async () => {
                 onChange={(e) => setPropertyId(e.target.value)}
                 className="w-full border-2 border-gray-300 rounded-lg p-2"
               >
-                <option value="">Sélectionnez une propriété</option>
+                <option value="">Sélectionnez une Bâtiment</option>
                 {properties.map((property) => (
                   <option key={property.id} value={property.id}>
                     {property.name}

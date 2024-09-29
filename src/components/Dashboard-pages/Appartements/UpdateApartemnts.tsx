@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios, { AxiosError } from 'axios';
-import { useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Stepper, Step, StepLabel, Button, Typography, TextField } from '@mui/material';
 import { fetchProperties } from '../utils/apiUtils';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
@@ -78,7 +78,8 @@ const UpdateApartment: React.FC = () => {
     setSelectedType(selectedOption);
     console.log('Selected Type:', selectedOption); // Log selected type
 };
-
+const navigate = useNavigate();
+const location = useLocation();
   const isStepSkipped = (step: number) => skipped.has(step);
 
   useEffect(() => {
@@ -119,22 +120,42 @@ const UpdateApartment: React.FC = () => {
   }, [id, API_BASE_URL]);
 
   const handleNext = async () => {
-    if (!id) return;
+    if (!id) {
+      console.error('ID is missing.');
+      return;
+    }
+  
     if (activeStep === 0) {
-      await handleUpdateApartmentData();
-    } else {
-      setActiveStep((prev) => prev + 1);
-    }
-    if (activeStep === 1) {
-      await handleSubmitImages();  // Handle images submission on Step 1
-    }
-    if (activeStep === 2) {
-      await handleSubmitDocuments();  // Handle documents submission on Step 2
-    }
-    if (activeStep === 3) {
-      setActiveStep(0);
+      try {
+        await handleUpdateApartmentData();
+      } catch (error) {
+        console.error('Failed to update apartment data:', error);
+        setError('Failed to update apartment data.');
+      }
+      setActiveStep((prev) => prev + 1); // Always proceed to the next step
+    } 
+    else if (activeStep === 1) {
+      try {
+        await handleSubmitImages(); // Submit images if available
+      } catch (error) {
+        console.error('Failed to submit images:', error);
+        setError('Failed to submit images.');
+      }
+      setActiveStep((prev) => prev + 1); // Proceed to the next step regardless
+    } 
+    else if (activeStep === 2) {
+      try {
+        await handleSubmitDocuments(); // Submit documents if available
+      } catch (error) {
+        console.error('Failed to submit documents:', error);
+        setError('Failed to submit documents.');
+      }
+      setActiveStep((prev) => prev + 1); // Move to the final step
+      navigate('/dashboard/apartments'); // Redirect after final step
     }
   };
+  
+  
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -704,20 +725,20 @@ const handleDocumentsChange = (newDocuments: DocumentType[]) => {
               </div>
             )}
       <div className="flex justify-between mt-4">
-        <Button
-          color="inherit"
-          disabled={activeStep === 0}
-          onClick={handleBack}
-        >
-          Précédent
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleNext}
-        >
-          {activeStep === 3 ?'Terminer':'suivant'}
-        </Button>
+      <Button
+    color="inherit"
+    disabled={activeStep === 0}
+    onClick={handleBack}
+  >
+    Précédent
+  </Button>
+  <Button
+    variant="contained"
+    color="primary"
+    onClick={handleNext}
+  >
+    {activeStep === steps.length + 1 ? 'Terminer' : 'Suivant'}
+  </Button>
       </div>
 
       {error && <div className="text-red-500 mt-4">{error}</div>}

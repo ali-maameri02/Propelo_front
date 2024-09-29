@@ -181,7 +181,7 @@ const AppartementDetails: React.FC = () => {
             <DetailsContainer>
               <h2 className="text-xl font-semibold mb-2">Chambres</h2>
               {rooms.map((room, index) => (
-                <p key={index}>{room.name} Chambre: {room.surface} m²</p>
+                <p key={index}><strong>{room.name}</strong> {room.surface} m²</p>
               ))}
             </DetailsContainer>
           </Slide>

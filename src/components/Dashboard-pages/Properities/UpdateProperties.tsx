@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Typography from '@mui/material/Typography';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Stepper, Step, StepLabel, Breadcrumbs } from '@mui/material';
 // import Setpictures from './Setpictures';
 import PropertyMap from './PropertyMap';
@@ -26,6 +26,8 @@ const UpdateProperties: React.FC = () => {
   const [success, setSuccess] = useState<string | null>(null);
   const [skipped, setSkipped] = useState(new Set<number>());
   const isStepSkipped = (step: number) => skipped.has(step);
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (id) {
       const fetchData = async () => {
@@ -66,6 +68,8 @@ const UpdateProperties: React.FC = () => {
       setActiveStep((prev) => prev + 1);
     } else if (activeStep === 3) {
       await updatePropertyLocation();
+      navigate(`/dashboard/properties`); // Redirect to apartments route
+
     }
   };
 
@@ -84,7 +88,6 @@ const UpdateProperties: React.FC = () => {
       console.error('pictureId is undefined.');
       return;
     }
-  console.log('deuxieme fois ya zbi',pictureId)
     // Create file input dialog and handle file selection
     const input = document.createElement('input');
     input.type = 'file';

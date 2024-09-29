@@ -9,6 +9,7 @@ import Typography from '@mui/material/Typography';
 import Setpictures, { ImageType } from "./Setpictures";
 import PropertyMap from "./PropertyMap";
 import axios, { AxiosError } from 'axios';
+import { useNavigate } from "react-router-dom";
 
 const steps = [
     'Saisir les détails de la propriété',
@@ -44,6 +45,7 @@ const AddPropertie: React.FC = () => {
     const [success, setSuccess] = useState<string | null>(null);
 
     const isStepSkipped = (step: number) => skipped.has(step);
+    const navigate = useNavigate();
 
     const handleNext = async () => {
         if (activeStep === 0) {
@@ -84,6 +86,8 @@ console.log("propid", id)
             } catch (err) {
                 console.error("Update failed:", err);
             }
+            navigate(`/dashboard/properties`); // Redirect to apartments route
+
             setActiveStep((prevActiveStep) => prevActiveStep + 1);
         }
     };
@@ -327,7 +331,7 @@ console.log("propid", id)
                 {activeStep === 0 && (
                     <div>
                         {/* Render form for property details */}
-                        <Typography variant="h6">Saisir les détails de la propriété</Typography>
+                        <Typography variant="h6">Saisir les détails de le Bâtiment</Typography>
                         <form className="w-full mt-5 h-full flex flex-row md:flex-row justify-between">
                       <div className="group-inputs-left  flex flex-col justify-around  w-full md:w-1/2 mr-5">
                           <div className="group-input flex flex-col md:flex-row items-center font-almarai">
