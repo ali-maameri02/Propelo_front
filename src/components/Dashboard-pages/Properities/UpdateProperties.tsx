@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import Typography from '@mui/material/Typography';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Stepper, Step, StepLabel, Breadcrumbs } from '@mui/material';
+import { Stepper, Step, StepLabel, Breadcrumbs, Button, IconButton } from '@mui/material';
 // import Setpictures from './Setpictures';
 import PropertyMap from './PropertyMap';
-
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/PhotoCameraOutlined';
 const steps = [
   'Saisir les détails de la propriété',
   'Ajouter les photos',
@@ -24,10 +26,16 @@ const UpdateProperties: React.FC = () => {
   const [locationData, setLocationData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [images, setImages] = useState<ImageWithPreview[]>([]);
+
   const [skipped, setSkipped] = useState(new Set<number>());
   const isStepSkipped = (step: number) => skipped.has(step);
   const navigate = useNavigate();
-
+  type ImageWithPreview = {
+    file: File;
+    preview: string;
+  };
+  
   useEffect(() => {
     if (id) {
       const fetchData = async () => {
@@ -63,6 +71,12 @@ const UpdateProperties: React.FC = () => {
       // } else {
       //   console.warn("No picture selected for editing.");
       // }
+      try {
+        await handleSubmitImages(); // Submit images if available
+      } catch (error) {
+        console.error('Failed to submit images:', error);
+        setError('Failed to submit images.');
+      }
       setActiveStep((prev) => prev + 1);
     } else if (activeStep === 2) {
       setActiveStep((prev) => prev + 1);
@@ -105,13 +119,13 @@ const UpdateProperties: React.FC = () => {
         console.log('tswurti',file)
   
         try {
-          console.log('dkhlttttttt')
+          // console.log('dkhlttttttt')
           const response = await axios.put(`${API_BASE_URL}/PropertyPicture/${pictureId}`, formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
             },
           });
-  console.log('khrjt b charaf')
+  // console.log('khrjt b charaf')
           if (response.status === 200) {
             const updatedPicture = { ...currentPictures.find(p => p.Id === pictureId), picturePath: URL.createObjectURL(file) };
             setCurrentPictures(prev => prev.map(p => (p.Id === pictureId ? updatedPicture : p)));
@@ -206,6 +220,114 @@ const UpdateProperties: React.FC = () => {
     setFormData({ ...formData, [name]: value });
   };
   
+  const handleImagesChange = (newImages: ImageWithPreview[]) => {
+    setImages((prevImages) => [...prevImages, ...newImages]); // Append new images
+  };
+  
+  const handleDeletePicture = async (pictureId: number) => {
+    try {
+      // Make sure the id is valid and the request is correct
+      await axios.delete(`${API_BASE_URL}/PropertyPicture/${pictureId}`);
+      
+      // Update currentPictures state after successful deletion
+      setCurrentPictures((prevPictures) => prevPictures.filter(picture => picture.id !== pictureId));
+  
+      console.log('Picture deleted successfully');
+    } catch (error) {
+      console.error('Error deleting picture:', error);
+      // Optionally display an error message to the user
+    }
+  };
+  const handleDeleteImage = (index: number) => {
+    setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+  };
+
+  // const handleAddNewPicture = async () => {
+  //   const input = document.createElement('input');
+  //   input.type = 'file';
+  //   input.accept = 'image/*';
+  //   input.multiple = true;
+  
+  //   input.onchange = async (event: Event) => {
+  //     const target = event.target as HTMLInputElement;
+  //     const files = target.files;
+  
+  //     if (files && files.length > 0) {
+  //       const newImages: ImageWithPreview[] = Array.from(files).map((file) => ({
+  //         file,
+  //         preview: URL.createObjectURL(file),
+  //       }));
+  
+  //       handleImagesChange(newImages); // Append new images
+  
+  //       // Confirm before uploading
+  //       if (window.confirm("Voulez-vous envoyer ces images ?")) {
+  //         const formData = new FormData();
+          
+  //         newImages.forEach((image) => {
+  //           formData.append('Pictures', image.file);
+  //         });
+  
+  //         if (id) {
+  //           formData.append('propertyId', id);
+  //         } else {
+  //           console.error("Property ID is undefined.");
+  //           setError("ID de propriété manquant.");
+  //           return;
+  //         }
+  
+  //         try {
+  //           const response = await axios.post(`${API_BASE_URL}/PropertyPicture`, formData, {
+  //             headers: {
+  //               'Content-Type': 'multipart/form-data',
+  //             },
+  //           });
+  
+  //           if (response.status === 200) {
+  //             setCurrentPictures((prev) => [...prev, ...response.data]); // Update pictures
+  //             setSuccess('Les images ont été ajoutées avec succès.');
+  //             setImages([]); // Clear previews after successful upload
+  //           } else {
+  //             throw new Error(`HTTP error! Status: ${response.status}`);
+  //           }
+  //         } catch (err) {
+  //           if (err instanceof Error) {
+  //             setError(`Erreur lors de l'ajout de l'image: ${err.message}`);
+  //           }
+  //         }
+  //       }
+  //     }
+  //   };
+  
+  //   input.click();
+  // };
+  const handleSubmitImages = async () => {
+    if (!id) return;
+    const formData = new FormData();
+    images.forEach((image) => {
+      if (image.file) {
+        formData.append('Pictures', image.file, image.file.name);
+      }
+    });
+    formData.append('propertyId', id);
+  
+    try {
+      const response = await axios.post(`${API_BASE_URL}/PropertyPicture`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      if (response.status === 200) {
+        setSuccess('Images uploaded successfully!');
+      } else {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        setError(`Erreur lors de l'envoi des images: ${err.response?.data.errors.file[0]}`);
+      } else {
+        setError('Une erreur inattendue est survenue.');
+      }
+    }
+  };
 
   if (!formData) {
     return <div>Loading...</div>;
@@ -361,30 +483,74 @@ const UpdateProperties: React.FC = () => {
         </div>
       )}
 
+
 {activeStep === 1 && (
   <div>
-    <Typography variant="h6">Ajouter ou Modifier les photos</Typography>
-    <div className="flex flex-wrap">
-    {currentPictures.map((picture: any) => (
-  <div key={picture.Id} className="relative m-2">
-    <img src={picture.picturePath} alt={`Property Image ${picture.id}`} className="w-40 h-40 object-cover" />
-    <button
-      onClick={() => {
-        console.log(`Clicked picture ID: ${picture.id}`); // Debugging line
-        setSelectedPictureId(picture.id);
-        console.log('tklikit',)
-        handleEditPicture(picture.id);
-        console.log(picture.id)
-      }} // Set selected picture ID
-      className="absolute top-0 right-0 p-2 bg-red-500 text-white rounded"
-    >
-      Modifier
-    </button>
-  </div>
-))}
+     <h2>Modifier les photos</h2>
+      <div className="flex flex-row justify-between gap-4">
+        {currentPictures.map((picture) => (
+          <div key={picture.id} className='flex flex-col flex-wrap w-100'>
+            <img
+              src={picture.picturePath}
+              alt="Appartement"
+              className="h-52 w-72 rounded-lg shadow-lg object-cover"
+            />
+            <div className='w-5 flex flex-row'>
+              <IconButton onClick={() => handleDeletePicture(picture.id)}>
+                <DeleteIcon />
+              </IconButton>
+              <Button onClick={() => handleEditPicture(picture.id)}>
+                <EditIcon />
+              </Button>
+            </div>
+          </div>
+        ))}
+      </div>
 
-    </div>
-    
+      <div className="mt-6">
+        <div className="flex items-center justify-center border-2 border-gray-300 border-dashed rounded-lg p-6 px-2 w-52">
+          <label className="flex flex-col items-center cursor-pointer">
+            <AddPhotoAlternateIcon className="text-color1" fontSize="large" />
+            <span className="mt-2 text-color1 underline">Ajouter des images</span>
+            <span className="mt-1 text-gray-400">Formats: PNG, JPG, JPEG, WEBP</span>
+            <input
+              type="file"
+              hidden
+              multiple
+              accept="image/*"
+              onChange={(e) => {
+                const files = Array.from(e.target.files || []);
+                const newImages: ImageWithPreview[] = files.map((file) => ({
+                  file,
+                  preview: URL.createObjectURL(file),
+                }));
+                handleImagesChange(newImages);
+              }}
+            />
+          </label>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+          {images.map((image, index) => (
+            <div key={index} className="relative">
+              <img
+                src={image.preview}
+                alt="Appartement"
+                className="h-32 w-32 rounded-md object-cover shadow-md"
+              />
+              <IconButton
+                onClick={() => handleDeleteImage(index)}
+                className="absolute top-0 right-0 m-1 bg-white text-red-600"
+              >
+                <DeleteIcon />
+              </IconButton>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {success && <p style={{ color: 'green' }}>{success}</p>}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
   </div>
 )}
       {activeStep === 2 && <PropertyMap onLocationSave={saveLocationData} locationData={loadLocationData()} />}

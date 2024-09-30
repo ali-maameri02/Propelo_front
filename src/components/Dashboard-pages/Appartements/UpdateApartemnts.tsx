@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios, { AxiosError } from 'axios';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { Stepper, Step, StepLabel, Button, Typography, TextField } from '@mui/material';
+import { Stepper, Step, StepLabel, Button, Typography, TextField, IconButton } from '@mui/material';
 import { fetchProperties } from '../utils/apiUtils';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/PhotoCameraOutlined';
+
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 type ImageType = { file: File; preview: string };
 type DocumentType = { file: File; name: string };
@@ -257,7 +260,6 @@ const location = useLocation();
     }
   };
   
-  // Submit Documents
   const handleSubmitDocuments = async () => {
     if (!id) return;
     const formData = new FormData();
@@ -285,6 +287,7 @@ const location = useLocation();
       }
     }
   };
+  
 
 
 
@@ -300,7 +303,7 @@ const location = useLocation();
 
   const handleEditDocument = async (documentId: number) => {
     if (!id) return;
-
+  
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = '*/*';
@@ -313,14 +316,14 @@ const location = useLocation();
         formData.append('id', documentId.toString());
         formData.append('ApartmentId', id);
         formData.append('Documents', file);
-
+  
         try {
           const response = await axios.put(`${API_BASE_URL}/ApartmentDocument/${documentId}`, formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
             },
           });
-
+  
           if (response.status === 200) {
             const updatedDocument = { ...currentDocuments.find(d => d.Id === documentId), documentPath: URL.createObjectURL(file) };
             setCurrentDocuments(prev => prev.map(d => (d.Id === documentId ? updatedDocument : d)));
@@ -335,9 +338,23 @@ const location = useLocation();
         }
       }
     };
-
+  
     input.click();
   };
+  const handleDeleteDocument = async (documentId: number) => {
+    try {
+      // Make the DELETE request to remove the document
+      await axios.delete(`${API_BASE_URL}/ApartmentDocument/${documentId}`);
+      
+      // Update the documents state after successful deletion
+      setCurrentDocuments(prevDocuments => prevDocuments.filter(doc => doc.id !== documentId));
+      setSuccess('Document deleted successfully.');
+    } catch (error) {
+      console.error('Error deleting document:', error);
+      setError('Erreur lors de la suppression du document.');
+    }
+  };
+  
   const handleEditPicture = async (pictureId: number) => {
     if (!id) {
       console.error('Property ID is undefined.');
@@ -390,7 +407,33 @@ const location = useLocation();
     const { name, value } = e.target;
     setApartmentData({ ...apartmentData, [name]: value });
   };
-
+    // Function to handle deleting an image
+    const handleDeleteImage = (index: number) => {
+      setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+    };
+    const handleDeletedoc = (index: number) => {
+      setDocuments((prevdocs) => prevdocs.filter((_, i) => i !== index));
+    };
+  
+    // Handle image change and addition
+    const handleImagesChange = (newImages: ImageType[]) => {
+      setImages((prevImages) => [...prevImages, ...newImages]); // Append new images
+    };
+    const handleDeletePicture = async (pictureId: number) => {
+      try {
+        // Make sure the id is valid and the request is correct
+        await axios.delete(`${API_BASE_URL}/ApartmentPicture/${pictureId}`);
+        
+        // Update currentPictures state after successful deletion
+        setCurrentPictures((prevPictures) => prevPictures.filter(picture => picture.id !== pictureId));
+    
+        console.log('Picture deleted successfully');
+      } catch (error) {
+        console.error('Error deleting picture:', error);
+        // Optionally display an error message to the user
+      }
+    };
+    
   const handleFChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedType = e.target.value as PieceType;
     setSelectedF(selectedType);
@@ -420,13 +463,14 @@ const location = useLocation();
     setPieces(pieces.filter((_, i) => i !== index));
   };
  // Handle images and documents change
- const handleImagesChange = (newImages: ImageType[]) => {
-  setImages(newImages);
-};
+//  const handleImagesChange = (newImages: ImageType[]) => {
+//   setImages(newImages);
+// };
 
 const handleDocumentsChange = (newDocuments: DocumentType[]) => {
-  setDocuments(newDocuments);
+  setDocuments((prevDocuments) => [...prevDocuments, ...newDocuments]);
 };
+
   if (!apartmentData) {
     return <div>Loading...</div>;
   }
@@ -628,19 +672,30 @@ const handleDocumentsChange = (newDocuments: DocumentType[]) => {
 
     <div className="flex flex-row justify-between gap-4">
       {currentPictures.map((picture) => (
-        <div key={picture.id}>
+        <div key={picture.id} className='flex flex-row flex-wrap w-100'>
           <img
             src={picture.picturePath}
             alt="Appartement"
             className="h-52 w-72 rounded-lg shadow-lg object-cover"
           />
-          <Button onClick={() => handleEditPicture(picture.id)}>Modifier</Button>
+          <div className='w-5 flex flex-row'>
+          <IconButton
+              onClick={() => handleDeletePicture(picture.id)}
+              // className="absolute top-0 right-0 m-1 bg-white text-red-600"
+            >
+              <DeleteIcon />
+            </IconButton>
+          <Button onClick={() => handleEditPicture(picture.id)}>              <EditIcon />
+</Button>
+
+          </div>
+
         </div>
       ))}
     </div>
 
     <div className="mt-6">
-      <div className="flex items-center justify-center border-2 border-gray-300 border-dashed rounded-lg p-6">
+      <div className="flex items-center justify-center border-2 border-gray-300 border-dashed rounded-lg p-6 px-2 w-52">
         <label className="flex flex-col items-center cursor-pointer">
           <AddPhotoAlternateIcon className="text-color1" fontSize="large" />
           <span className="mt-2 text-color1 underline">Ajouter des images</span>
@@ -656,13 +711,13 @@ const handleDocumentsChange = (newDocuments: DocumentType[]) => {
                 file,
                 preview: URL.createObjectURL(file),
               }));
-              handleImagesChange(newImages);
+              handleImagesChange(newImages); // Append new images
             }}
           />
         </label>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-4 ">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-4">
         {images.map((image, index) => (
           <div key={index} className="relative">
             <img
@@ -670,6 +725,13 @@ const handleDocumentsChange = (newDocuments: DocumentType[]) => {
               alt="Appartement"
               className="h-32 w-32 rounded-md object-cover shadow-md"
             />
+            {/* Delete icon */}
+            <IconButton
+              onClick={() => handleDeleteImage(index)}
+              className="absolute top-0 right-0 m-1 bg-white text-red-600"
+            >
+              <DeleteIcon />
+            </IconButton>
           </div>
         ))}
       </div>
@@ -677,18 +739,22 @@ const handleDocumentsChange = (newDocuments: DocumentType[]) => {
   </div>
 )}
 
+
+
             {activeStep === 2 && (
               <div>
                 <h2>Modifier les documents</h2>
                 <div>
-                  {currentDocuments.map((document) => (
-                    <div key={document.Id}>
-                      <a href={document.documentPath} target="_blank" rel="noopener noreferrer">
-                        {document.documentName}
-                      </a>
-                      <Button onClick={() => handleEditDocument(document.Id)}>Modifier</Button>
-                    </div>
-                  ))}
+                {currentDocuments.map((document, index) => (
+  <div key={document.id} className="flex items-center justify-start mb-5 bg-gray-100 p-2 rounded-lg shadow">
+    <a href={document.documentPath} target="_blank" rel="noopener noreferrer">
+      {document.documentName}
+    </a>
+    <button onClick={() => handleEditDocument(document.id)} className="btn-edit"><AttachFileIcon/></button>
+    <button onClick={() => handleDeleteDocument(document.id)} className="btn-delete"><DeleteIcon/></button>
+  </div>
+))}
+
                   <div className="flex items-center justify-center border-2 border-gray-300 border-dashed rounded-lg p-4">
         <label className="flex flex-col items-center cursor-pointer">
           <AttachFileIcon className="text-color1" fontSize="large" />
@@ -715,9 +781,9 @@ const handleDocumentsChange = (newDocuments: DocumentType[]) => {
         {documents.map((doc, index) => (
           <div key={index} className="flex items-center justify-between bg-gray-100 p-2 rounded-lg shadow">
             <Typography>{doc.name}</Typography>
-            {/* <Button onClick={() => handleDocumentDelete(index)} variant="outlined" color="error" size="small">
+            <Button onClick={() =>handleDeletedoc(index)} variant="outlined" color="error" size="small">
               Supprimer
-            </Button> */}
+            </Button>
           </div>
         ))}
       </div>
