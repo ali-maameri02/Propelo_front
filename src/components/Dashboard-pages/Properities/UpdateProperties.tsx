@@ -346,7 +346,7 @@ const UpdateProperties: React.FC = () => {
 
       {activeStep === 0 && (
         <div>
-          <Typography variant="h6">Modifier les détails de la propriété</Typography>
+          <Typography variant="h6">Modifier les détails de la Bâtiments</Typography>
           <form className="w-[70vw] ml-5 mt-5 h-full flex flex-row justify-between">
                       <div className="group-inputs-left  flex flex-col justify-around  w-full md:w-1/2 mr-5">
         <div className="group-input flex flex-col md:flex-row items-center font-almarai">

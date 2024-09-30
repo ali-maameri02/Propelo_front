@@ -124,7 +124,7 @@ const ApartmentsByProperty: React.FC = () => {
       {property && (
         <div className="mb-4">
           <Typography variant="h5" gutterBottom>
-            Property: {property.name}
+          Bâtiment: {property.name}
           </Typography>
           <Typography variant="body1">{property.address}, {property.city}</Typography>
           {pictures[property.id]?.length > 0 && (
