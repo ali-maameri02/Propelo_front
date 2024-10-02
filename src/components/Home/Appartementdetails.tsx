@@ -142,7 +142,7 @@ const AppartementDetails: React.FC = () => {
     <>
       <Navbar />
       <div className="Pictures mt-1 w-full p-3">
-        <h1 className="font-almarai text-black text-[2rem]">Images</h1>
+        <h1 className="font-almarai text-black text-[2rem]">{apartment.name}</h1>
         <Getpictures images={pictures.map((url) => ({ url }))} />
       </div>
       <div className="contentdetails relative flex flex-col lg:flex-row-reverse lg:justify-between p-2">

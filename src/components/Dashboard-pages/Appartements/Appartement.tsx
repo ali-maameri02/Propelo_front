@@ -22,11 +22,46 @@ const Appartement: React.FC = () => {
     const [rows, setRows] = useState<Apartment[]>([]);
     const [selectedRows, setSelectedRows] = useState<GridRowSelectionModel>([]);
     const [error, setError] = useState<string | null>(null);
+    const [properties, setProperties] = useState<{ id: number; name: string }[]>([]);
+
     const navigate = useNavigate();
     const location = useLocation();
 
+    useEffect(() => {
+        const fetchApartmentsAndProperties = async () => {
+            try {
+                const [apartmentsResponse, propertiesResponse] = await Promise.all([
+                    axios.get('http://propelo.runasp.net/api/Apartment'),
+                    axios.get('http://propelo.runasp.net/api/Property'),
+                ]);
+                setRows(apartmentsResponse.data);
+                setProperties(propertiesResponse.data);
+                setError(null); // Reset error state on successful fetch
+            } catch (error) {
+                setError("Erreur lors de la récupération des appartements ou des propriétés");
+                console.error("Error fetching apartments or properties", error);
+            }
+        };
+
+        fetchApartmentsAndProperties(); // Fetch data immediately on mount
+
+        const intervalId = setInterval(fetchApartmentsAndProperties, 2000); // Fetch every 5 seconds
+
+        // Cleanup the interval on component unmount
+        return () => clearInterval(intervalId);
+    }, []);
+
     const columns: GridColDef[] = [
-        { field: 'name', headerName: 'Nom', width: 150 },
+        {
+            field: 'propertyName',
+            headerName: 'Bâtiment',
+            width: 200,
+            renderCell: (params) => {
+                const property = properties.find(prop => prop.id === params.row.propertyId);
+                return property ? property.name : 'Inconnu';
+            },
+        },
+        { field: 'name', headerName: 'Appartement', width: 150 },
         {
             field: 'type',
             headerName: 'Type',
@@ -35,7 +70,7 @@ const Appartement: React.FC = () => {
                 <span>{`F ${params.row.type} `}</span> // Customize the display format
             ),
         },
-                { field: 'floor', headerName: 'Étage', width: 130 },
+        { field: 'floor', headerName: 'Étage', width: 130 },
         { field: 'surface', headerName: 'Surface (m²)', width: 150 },
         {
             field: 'sold',
@@ -69,28 +104,13 @@ const Appartement: React.FC = () => {
         },
     ];
 
-    useEffect(() => {
-        const fetchApartments = async () => {
-            try {
-                const response = await axios.get('http://propelo.runasp.net/api/Apartment');
-                const data = response.data as Apartment[];
-                setRows(data);
-            } catch (error) {
-                setError("Erreur lors de la récupération des appartements");
-                console.error("Error fetching apartments", error);
-            }
-        };
-
-        fetchApartments();
-    }, []);
-
     const handleAddPropertyClick = () => {
         navigate(`${location.pathname}/AddApartments`);
     };
 
     const handleEditClick = (id: number) => {
         navigate(`update/${id}`);
-        console.log('click')
+        console.log('click');
     };
 
     const handleDeleteClick = async (ids: number[]) => {
@@ -119,25 +139,24 @@ const Appartement: React.FC = () => {
             // Fetch the current apartment data
             const response = await axios.get(`http://propelo.runasp.net/api/Apartment/${id}`);
             const apartment = response.data;
-    
+
             // Update the sold field
             const updatedApartment = { ...apartment, sold };
-    
+
             // Send the updated apartment object to the server
             await axios.put(`http://propelo.runasp.net/api/Apartment/${id}`, updatedApartment);
-    
+
             // Update the rows state to reflect the changed sold status
             setRows((prevRows) =>
                 prevRows.map((row) => (row.id === id ? { ...row, sold } : row))
             );
-            console.log(response.status)
+            console.log(response.status);
             setError(null);
         } catch (error) {
             setError("Erreur lors de la mise à jour du statut vendu");
             console.error("Error updating sold status", error);
         }
     };
-    
 
     const isAddApartmentsRoute = location.pathname.endsWith('/AddApartments');
     const isUpdateApartmentsRoute = location.pathname.includes('/update/');
@@ -150,9 +169,9 @@ const Appartement: React.FC = () => {
                 <>
                     <div className="head w-full flex flex-row justify-between items-center mr-0 py-3 pt-0">
                         <h1 className="font-almarai font-bold text-textcolor">Appartements</h1>
-                        <div className="flex flex-row justify-end  w-full">
+                        <div className="flex flex-row justify-end w-full">
                             {selectedRows.length > 0 && (
-                                <Button variant="contained" sx={{mr:'5rem'}} color="error" onClick={handleDeleteSelectedRows}>
+                                <Button variant="contained" sx={{ mr: '5rem' }} color="error" onClick={handleDeleteSelectedRows}>
                                     Supprimer sélection
                                 </Button>
                             )}

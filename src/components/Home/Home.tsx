@@ -7,6 +7,7 @@ import PropertiesMarkerMap from "./PropertiesMarkerMap";
 import Footer from "./Footer";
 import { Slide } from "react-awesome-reveal";
 import { SelectChangeEvent } from "@mui/material";
+import { Apartment } from "@mui/icons-material";
 
 export const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -34,8 +35,13 @@ export const Home: React.FC = () => {
     
         // Filter apartments that are not sold
         const unsoldApartments = apartmentData.filter((apartment: any) => !apartment.sold);
+        const emptyApartments = apartmentData.filter((apartment: any) => apartment.name || apartment.floor);
+        
         
         setApartments(unsoldApartments);
+        setApartments(emptyApartments);
+       
+    
     
         // Fetch pictures for each unsold apartment
         const picturePromises = unsoldApartments.map(async (apartment: any) => {
@@ -105,7 +111,8 @@ export const Home: React.FC = () => {
         <div className="flex flex-col w-1/3 space-y-4">
           {/* Filters */}
           <div className="flex flex-col space-y-4 mb-4">
-  <FormControl variant="outlined" size="small" fullWidth>
+          <div className="flex flex-row justify-between items-center">
+  <FormControl variant="outlined" size="small" className="w-52" >
     <InputLabel id="floor-label">Étages</InputLabel>
     <Select
       labelId="floor-label"
@@ -120,7 +127,8 @@ export const Home: React.FC = () => {
     </Select>
   </FormControl>
 
-  <FormControl variant="outlined" size="small" fullWidth>
+  <FormControl variant="outlined" size="small" className="w-52" >
+   
     <InputLabel id="type-label">Nombre de Chambres</InputLabel>
     <Select
       labelId="type-label"
@@ -136,7 +144,7 @@ export const Home: React.FC = () => {
       ))}
     </Select>
   </FormControl>
-
+  </div>
   <div className="mb-4">
     <span className="block text-gray-700 mb-2">Superficie</span>
     <Slider
@@ -171,16 +179,16 @@ export const Home: React.FC = () => {
             scrollbarColor: "#2563EB transparent", }}>
             {/* List of apartments */}
             {filteredApartments.map((apartment) => (
-              <Slide key={apartment.id} direction="left" className="p-4 bg-white shadow rounded-md cursor-pointer mb-4">
+              <Slide key={apartment.id} direction="left" className="p-4 bg-white shadow rounded-md cursor-pointer mb-4 w-100">
                 <div className="" onClick={() => handleCardClick(apartment.id, apartment.propertyId)}>
-                  <div className="flex flex-row items-center justify-around w-100">
+                  <div className="flex flex-row items-center  w-100">
                     {/* Display first picture if available */}
                     {pictures[apartment.id]?.length > 0 ? (
-                      <div className="mb-2">
+                      <div className="mb-2 mr-3">
                         <img
                           src={pictures[apartment.id][0]}
                           alt={`Image de ${apartment.name}`}
-                          className="w-full h-32 object-cover rounded-md"
+                          className="w-32 h-32 object-cover rounded-md"
                         />
                       </div>
                     ) : (

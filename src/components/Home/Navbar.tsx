@@ -27,9 +27,11 @@ const Navbar: React.FC = () => {
         <Slide direction="down">
             <nav className="bg-white shadow-md flex justify-between p-4">
                 <div className="flex items-center">
-                    <div className="flex items-center">
+                    <div className="flex items-center w-100 flex-nowrap">
+                        <a href="/" className="flex items-center w-100 flex-nowrap">
                         <img src={Logo} alt="" />
                         <span className="ml-2 text-xl font-semibold">Propelo</span>
+                        </a>
                     </div>
                 </div>
                 <span className="text-gray-500">{unsoldApartmentsCount} Appartements A vendre </span>

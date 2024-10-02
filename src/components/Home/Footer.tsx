@@ -13,7 +13,7 @@ const Footer : React.FC = () =>{
             <span className="ml-2 text-xl font-semibold">Propelo</span>
           </div >
           <div className="number flex flex-col justify-center items-center">
-          <span className="ml-2 text-xl font-semibold">+213 697-98-31-87</span>
+          <span className="ml-2 text-xl font-semibold">+213 669-79-39-38</span>
       <span>Support@gmail.com</span>
           </div>
         <div className="flex space-x-4">

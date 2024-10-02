@@ -9,7 +9,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Slide } from "react-awesome-reveal";
 import Footer from "./Footer";
 import { ArrowForward, ArrowBack } from '@mui/icons-material';
-
+import Navbar from "./Navbar";
 // Define the type for an apartment
 interface Apartment {
   id: number;
@@ -59,7 +59,7 @@ const ApartmentsByProperty: React.FC = () => {
         setPictures({ [propertyResponse.data.id]: pictureResponse.data.map(pic => pic.picturePath) });
 
       } catch (error) {
-        console.error("Error fetching property data", error);
+        console.error("Erreur lors de la récupération des données de la propriété", error);
       }
     };
 
@@ -94,7 +94,7 @@ const ApartmentsByProperty: React.FC = () => {
         }, { ...prevPictures }));
 
       } catch (error) {
-        console.error("Error fetching apartments or pictures", error);
+        console.error("Erreur lors de la récupération des appartements ou des images", error);
       }
     };
 
@@ -120,6 +120,8 @@ const ApartmentsByProperty: React.FC = () => {
   };
 
   return (
+    <>
+    <Navbar/>
     <div className="flex flex-col p-4">
       {property && (
         <div className="mb-4">
@@ -131,7 +133,7 @@ const ApartmentsByProperty: React.FC = () => {
             <div className="mb-4">
               <img
                 src={pictures[property.id][0]}
-                alt={`Picture of ${property.name}`}
+                alt={`Image de ${property.name}`}
                 className="w-full h-48 object-cover rounded-md mb-2 cursor-pointer"
                 onClick={() => handleImageClick(pictures[property.id], 0)}
               />
@@ -140,7 +142,7 @@ const ApartmentsByProperty: React.FC = () => {
                   <img
                     key={index}
                     src={pic}
-                    alt={`Additional picture ${index + 1}`}
+                    alt={`Image supplémentaire ${index + 1}`}
                     className="w-full h-32 object-cover rounded-md cursor-pointer"
                     onClick={() => handleImageClick(pictures[property.id], index + 1)}
                   />
@@ -153,7 +155,7 @@ const ApartmentsByProperty: React.FC = () => {
       
       <div className="card-apartments flex flex-col space-y-4 overflow-y-scroll" style={{ maxHeight: '80vh', scrollbarWidth: "thin", scrollbarColor: "#2563EB transparent" }}>
         {apartments.length === 0 ? (
-          <Typography>No apartments found for this property.</Typography>
+          <Typography>Aucun appartement trouvé pour cette propriété.</Typography>
         ) : (
           apartments.map((apartment) => (
             <Slide direction="left" key={apartment.id} className="p-4 bg-white shadow rounded-md cursor-pointer mb-4">
@@ -163,22 +165,22 @@ const ApartmentsByProperty: React.FC = () => {
                     <div className="mb-2">
                       <img
                         src={pictures[apartment.id][0]}
-                        // alt={pictures of ${apartment.name}}
-                        className="w-full h-32 object-cover rounded-md"
+                        // alt={`Images de ${apartment.name}`}
+                        className="w-64 h-32 object-cover rounded-md"
                       />
                     </div>
                   ) : (
                     <div className="mb-2">
                       <img
                         src="/path/to/default-image.jpg"
-                        alt="No picture available"
+                        alt="Aucune image disponible"
                         className="w-full h-32 object-cover rounded-md"
                       />
                     </div>
                   )}
                   <div className="details ml-5 flex flex-col">
                     <Typography variant="h6" component="span" className="font-semibold">{apartment.name}</Typography>
-                    <Typography variant="body2" component="span"> <strong> F</strong>{apartment.type} | Floor: {apartment.floor} | Surface: {apartment.surface} sqm</Typography>
+                    <Typography variant="body2" component="span"> <strong> F</strong>{apartment.type} | Étage: {apartment.floor} | Surface: {apartment.surface} m²</Typography>
                   </div>
                 </div>
               </div>
@@ -190,7 +192,7 @@ const ApartmentsByProperty: React.FC = () => {
       {/* Modal for image gallery */}
       <Modal open={isGalleryOpen} onClose={() => setIsGalleryOpen(false)}>
         <div className="flex flex-col items-center justify-center h-full bg-black">
-          <img src={currentGalleryImages[currentImageIndex]} alt={`Gallery image ${currentImageIndex + 1}`} className="max-w-full max-h-full" />
+          <img src={currentGalleryImages[currentImageIndex]} alt={`Image de la galerie ${currentImageIndex + 1}`} className="max-w-full max-h-full" />
           <div className="flex justify-between w-full p-4 absolute top-52">
             <Button onClick={handlePrev} style={{ color: 'white' }}>
               <ArrowBack />
@@ -203,7 +205,7 @@ const ApartmentsByProperty: React.FC = () => {
       </Modal>
 
       <Footer />
-    </div>
+    </div></>
   );
 };
 

@@ -526,7 +526,7 @@ const handleDocumentsChange = (newDocuments: DocumentType[]) => {
                 />
               </div>
               <div className="group-input mt-1 flex flex-col md:flex-row items-center font-almarai">
-                <label htmlFor="propertyId" className="mr-2 w-36">Propriété</label>
+                <label htmlFor="propertyId" className="mr-2 w-36">Bâtiment</label>
                 <select
                   name="propertyId"
                   id="propertyId"

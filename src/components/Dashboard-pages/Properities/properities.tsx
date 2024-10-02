@@ -63,6 +63,10 @@ const Properities: React.FC = () => {
         };
 
         fetchProperties();
+        const intervalId = setInterval(fetchProperties, 5000); // Fetch every 5 seconds
+
+        // Cleanup the interval on component unmount
+        return () => clearInterval(intervalId);
     }, []);
 
     const handleAddPropertyClick = () => {

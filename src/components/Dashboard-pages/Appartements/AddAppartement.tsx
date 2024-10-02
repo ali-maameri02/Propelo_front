@@ -402,7 +402,9 @@ const handleSubmitImages = async () => {
         </div>
     
         {pieces.map((_, index) => (
-          <div key={index} className="flex items-center mb-4">
+          <div key={index} className="flex items-end justify-around mb-4">
+             <div className="surface-area">
+              <label htmlFor="name">Piece</label>
             <input
               type="text"
               name={`pieceName${index + 1}`}
@@ -415,6 +417,9 @@ const handleSubmitImages = async () => {
               className="w-full border-2 rounded-lg border-gray-300 p-2 mr-2"
               placeholder={`Nom de la pièce ${index + 1}`}
             />
+            </div>
+            <div className="surface-area">
+              <label htmlFor="surface">Surface(m²)</label>
             <input
               type="number"
               name={`pieceSurface${index + 1}`}
@@ -427,6 +432,7 @@ const handleSubmitImages = async () => {
               className="w-full border-2 rounded-lg border-gray-300 p-2 mr-2"
               placeholder={`Surface de la pièce ${index + 1}`}
             />
+            </div>
             <button
               type="button"
               className="text-white bg-red-600 p-2 rounded-lg"
