@@ -34,12 +34,12 @@ export const Home: React.FC = () => {
         const apartmentData = response.data;
     
         // Filter apartments that are not sold
-        const unsoldApartments = apartmentData.filter((apartment: any) => !apartment.sold);
-        const emptyApartments = apartmentData.filter((apartment: any) => apartment.name || apartment.floor);
+        const unsoldApartments = apartmentData.filter((apartment: any) => !apartment.sold &&  apartment.name || apartment.floor);
+        // const emptyApartments = apartmentData.filter((apartment: any) =>);
         
         
         setApartments(unsoldApartments);
-        setApartments(emptyApartments);
+        // setApartments(emptyApartments);
        
     
     
@@ -85,14 +85,25 @@ export const Home: React.FC = () => {
       setFilter(prev => ({ ...prev, minSurface: newValue[0], maxSurface: newValue[1] }));
     }
   };
-
-  // Filter apartments based on filter criteria
   const filteredApartments = apartments.filter(apartment => {
+    // Check if there are any active filters applied. If none, show all apartments.
+    const noActiveFilter =
+      filter.floor === '' &&
+      filter.type === '' &&
+      filter.minSurface === 0 &&
+      filter.maxSurface === 500;
+  
     return (
-      (filter.floor ? apartment.floor === filter.floor : true) &&
-      (filter.type ? apartment.type === filter.type : true) &&
-      apartment.surface >= filter.minSurface &&
-      apartment.surface <= filter.maxSurface
+      noActiveFilter || // If no filters, show all apartments
+      (
+        // Check if floor filter is applied correctly
+        (filter.floor === null || filter.floor === undefined || apartment.floor === filter.floor) &&
+        // Check if type filter matches, or show all types
+        (filter.type ? apartment.type === filter.type : true) &&
+        // Surface area should be within the specified range
+        apartment.surface >= filter.minSurface &&
+        apartment.surface <= filter.maxSurface
+      )
     );
   });
 
