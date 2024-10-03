@@ -96,16 +96,17 @@ export const Home: React.FC = () => {
     return (
       noActiveFilter || // If no filters, show all apartments
       (
-        // Check if floor filter is applied correctly
-        (filter.floor === null || filter.floor === undefined || apartment.floor === filter.floor) &&
-        // Check if type filter matches, or show all types
-        (filter.type ? apartment.type === filter.type : true) &&
+        // Check if floor filter is applied correctly, allow all floors if filter.floor is empty
+        (filter.floor === '' || apartment.floor === filter.floor) &&
+        // Check if type filter matches, or show all types if filter.type is empty
+        (filter.type === '' || apartment.type === filter.type) &&
         // Surface area should be within the specified range
         apartment.surface >= filter.minSurface &&
         apartment.surface <= filter.maxSurface
       )
     );
   });
+  
 
   const handleCardClick = (apartmentId: number, propertyId: number) => {
     navigate(`/Apprtementdetail/${apartmentId}?propertyId=${propertyId}`);
