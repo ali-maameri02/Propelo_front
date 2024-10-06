@@ -32,7 +32,7 @@ export default function Login() {
   return (
     <div className='main-container w-[498px] h-[685px] text-[0px] bg-[#fffefc] relative overflow-hidden mx-auto my-0'>
       <span className="block h-[48px] font-['Poppins'] text-[32px] font-normal leading-[48px] text-[#000] relative text-left whitespace-nowrap mt-[79px] mr-0 mb-0 ml-[173px]">
-        Bienvenue promoter1
+        Bienvenue
       </span>
       <form className='flex w-[400px] flex-col gap-[8px] items-start flex-nowrap relative z-[1] mt-[76px] mr-0 mb-0 ml-[49px]' onSubmit={handleLogin}>
         <div className='flex w-[400px] pt-[25px] pr-[25px] pb-[25px] pl-[25px] flex-col gap-[25px] items-start shrink-0 flex-nowrap bg-[#fff] rounded-[6px] border-solid border border-[#e2e8f0] relative z-[2]'>
